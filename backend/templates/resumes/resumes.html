@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body %}
+    <form method="post" enctype="multipart/form-data" action="{% url 'resumes:index' %}">
+        {% csrf_token %}
+        {{resume_form.as_p}}
+        <button type="submit">Upload</button>
+    </form>
+{% endblock %}
