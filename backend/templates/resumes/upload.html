@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
+
 {% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <p> {{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
     <form method="post" enctype="multipart/form-data" action="{% url 'resumes:index' %}">
         {% csrf_token %}
-        {{resume_form.as_p}}
+        {{form.as_p}}
         <button type="submit">Upload</button>
     </form>
 {% endblock %}

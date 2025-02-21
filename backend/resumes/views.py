@@ -1,15 +1,21 @@
-from django.shortcuts import render
-from . import utils
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib import messages
+from django.http import HttpResponse
 from .forms import ResumeForm
 
-def index(request): # create a function called index that takes a request object
-    if request.method == 'POST':
-        resume_form = ResumeForm(request.POST)
-        if resume_form.is_valid():
-            pass
-        else:
-            pass
-    else:
-        response = {'resume_form' : ResumeForm()}
 
-    return render(request, 'resumes/resumes.html', response)
+
+def index(request):
+    if request.method == 'POST':
+        form = ResumeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'File successfully saved')
+            return redirect(reverse('resumes:index'))
+        else:
+            return HttpResponse(form.errors)
+        
+    else:
+        form = {'form': ResumeForm()}
+    return render(request, 'resumes/upload.html', form)
