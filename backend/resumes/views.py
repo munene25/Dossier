@@ -1,21 +1,20 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.contrib import messages
-from django.http import HttpResponse
+from django.urls import reverse
 from .forms import ResumeForm
-
-
+from .utils import parse_resume
 
 def index(request):
     if request.method == 'POST':
         form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'File successfully saved')
+            resume = form.save()
+            messages.success(request, 'File successfully saved.')
+            print(parse_resume(resume))
             return redirect(reverse('resumes:index'))
-        else:
-            return HttpResponse(form.errors)
-        
-    else:
-        form = {'form': ResumeForm()}
-    return render(request, 'resumes/upload.html', form)
+        messages.error(request, 'There was an error with your submission. Please submit a valid pdf file')
+    
+    # Render form for both GET and invalid POST cases
+    context = {'form': ResumeForm()}
+    return render(request, 'resumes/upload.html', context)
+
