@@ -1,11 +1,14 @@
-from django.test import TestCase, Client
+import os
+import shutil
+import tempfile
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, Client, override_settings
 from .models import ResumeModel
 from .forms import ResumeForm
-from django.core.files.uploadedfile import SimpleUploadedFile
-import os
 
-
+TEMP_MEDIA_ROOT = tempfile.mkdtemp()
+@override_settings(MEDIA_ROOT = TEMP_MEDIA_ROOT)
 class ResumeTests(TestCase):
     @staticmethod
     def create_dummy_pdf(content_type):
@@ -27,7 +30,7 @@ class ResumeTests(TestCase):
         self.assertEqual(ResumeModel.objects.count(),1)
     
     def test_upload_valid_pdf(self):
-        '''end to end client test for checking wheter the file a user '''
+        '''end to end client test for checking if model saves data if valid form is submitted'''
         client = Client()
         pdf_path = os.path.join(settings.BASE_DIR, 'resumes', 'tests', 'test_resume.pdf')
 
@@ -40,3 +43,16 @@ class ResumeTests(TestCase):
                 )
         self.assertEqual(response.status_code, 302, 'Redirect did not occur')
         self.assertEqual(ResumeModel.objects.count(),1)
+    
+    def test_upload_invalid_pdf(self):
+        '''end to end client test for checking whether the file a user '''
+        client = Client()
+        form = ResumeForm(data={}, files={'pdf_file': self.create_dummy_pdf('text/plain')})
+
+        client.post('/resumes/',{'pdf_file':form})
+        self.assertEqual(ResumeModel.objects.count(),0)
+
+    def tearDown(self):
+        '''delete all files after test runs'''
+        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
+        super().tearDown() # call the parentclass teardown method
