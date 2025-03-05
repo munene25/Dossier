@@ -1,2 +1,5 @@
 django
 pdfplumber
+requests
+djangorestframework
+jsonschema

@@ -10,8 +10,8 @@ def index(request):
         if form.is_valid():
             resume = form.save()
             messages.success(request, 'File successfully saved.')
-            print(parse_resume(resume))
-            return redirect(reverse('resumes:index'))
+            request.session['raw_pdf_text'] = parse_resume(resume.pdf_file.path)
+            return redirect(reverse('ollama:generate'))
         messages.error(request, 'There was an error with your submission. Please submit a valid pdf file')
     
     # Render form for both GET and invalid POST cases
