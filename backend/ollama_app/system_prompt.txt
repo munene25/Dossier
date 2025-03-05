@@ -1,0 +1,7 @@
+Given a resume, you are to extract and structure the data into a JSON format that maintains the original information while categorizing it under relevant sections.
+### **Rules:**
+-  **Overview can be generated** if missing (min 100, max 200 words)
+-  **Map what appears on the user's resume to the template's UserDefinedSections' section**, for example if the resume uses 'Work History' representing 'ProfessionalExperience', then 'ProfessionalExperience': 'Work History'
+-  **Ensure consistency**: If a section is missing in the resume, still include it in the JSON with an empty value.
+-  **Extras Section** should capture any additional information that does not fit under standard categories (e.g., projects, volunteer work, awards). This should be formatted as a {'<name of relevant section from resume>': '<string>'}
+-  Return **only** the structured JSON object.

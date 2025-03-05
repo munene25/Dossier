@@ -15,8 +15,6 @@ venv/
 backend/media/
 backend/db.sqlite3
 
-#ignore ollama
-ollama_app
 
 .env
 response_format.json

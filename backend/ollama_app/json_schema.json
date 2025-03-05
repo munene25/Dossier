@@ -1,0 +1,168 @@
+{
+    "type": "object",
+    "properties": {
+        "UserDefinedFields": {
+            "type": "object",
+            "properties": {
+                "PersonalInformation": {
+                    "type": "string"
+                },
+                "Overview": {
+                    "type": "string"
+                },
+                "ProfessionalExperience": {
+                    "type": "string"
+                },
+                "Education": {
+                    "type": "string"
+                },
+                "Skills": {
+                    "type": "string"
+                },
+                "Referees": {
+                    "type": "string"
+                }
+            }
+        },
+        "PersonalInformation": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Phone": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "LinkedIn": {
+                    "type": "string"
+                },
+                "ExternalLink": {
+                    "type": "string"
+                }
+            }
+        },
+        "Overview": {
+            "type": "object",
+            "properties": {
+                "Text": {
+                    "type": "string"
+                }
+            }
+        },
+        "ProfessionalExperience": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "JobTitle": {
+                        "type": "string"
+                    },
+                    "Company": {
+                        "type": "string"
+                    },
+                    "Location": {
+                        "type": "string"
+                    },
+                    "StartDate": {
+                        "type": "string"
+                    },
+                    "EndDate": {
+                        "type": "string"
+                    },
+                    "Responsibilities": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "Education": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Institution": {
+                        "type": "string"
+                    },
+                    "Degree": {
+                        "type": "string"
+                    },
+                    "Location": {
+                        "type": "string"
+                    },
+                    "GraduationDate": {
+                        "type": "string"
+                    },
+                    "Description": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "Skills": {
+            "type": "object",
+            "patternProperties": {
+                ".*": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Referees": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Occupation": {
+                        "type": "string"
+                    },
+                    "Institution": {
+                        "type": "string"
+                    },
+                    "Phone": {
+                        "type": "string"
+                    },
+                    "Email": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Extras": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "patternProperties": {
+                    ".*": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Certificates": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "Languages": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}
