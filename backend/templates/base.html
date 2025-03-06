@@ -6,7 +6,24 @@
     <title>Document</title>
 </head>
 <body>
-    {% block body %}
-    {% endblock %}
+    {% if messages %}
+        {% for message in messages %}
+            <p> {{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <div>
+        {% block body %}
+        {% endblock %}
+    </div>
 </body>
 </html>
+
+<style>
+    div{
+       display: flex;
+       justify-content: flex-start;
+       gap: 2rem;
+       margin: 2rem;
+       font-size: x-large;
+    }
+</style>

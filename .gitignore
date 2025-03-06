@@ -19,5 +19,4 @@ backend/db.sqlite3
 ollama_app
 
 .env
-response_format.json
-Test_Schemas.py
+%USERP~1/

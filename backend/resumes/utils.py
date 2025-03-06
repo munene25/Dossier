@@ -1,11 +1,9 @@
-import os
 import pdfplumber
-from dotenv import load_dotenv
 from google import genai
 from pathlib import Path
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-
+from django.conf import settings
 
 class _Extras(BaseModel):
     Category_Name:Optional[str] = None
@@ -62,12 +60,40 @@ class Resume(BaseModel):
     ProfessionalExperience: List[_ProfessionalExperience]
     Education: List[_Education]
     Skills: _Skills
-    Referees: List[_Referees]
+    Refferees: List[_Referees]
     Extras: List[_Extras]
     Certificates: List[str]
     Languages: List[str]
     
     
+sys_prmpt = ''' 
+    You are a resume parsing software.You are to extract and structure the data into a JSON format
+    that maintains the original information while categorizing it under relevant sections.
+
+    ### **Rules:**
+
+    -   **Matching can be fuzzy**: try to place things in categories through best fit .
+
+    -   **Map what appears on the user's resume to the template's UserDefinedSections' section**.
+        For example if the resume uses 'Work History' representing 'ProfessionalExperience', then 
+        'ProfessionalExperience': 'Work History'
+
+    -   **Ensure consistency**: If a section is missing in the resume, still include it in the JSON with an empty value.
+    -   **Extras Section** should capture any additional information that absolutely does not fit in:
+                PersonalInformation
+                ProfessionalExperience, 
+                Education,
+                Skills, 
+                Referees.
+            Just for illustration they **could be, but not limited to** the following:
+                Projects,
+                Volunteer-work,
+                Awards,
+                Fellowship,
+                Religion.
+
+'''
+
 def parse_resume(path_to_file):
     raw_extracted_text = "" 
 
@@ -77,30 +103,22 @@ def parse_resume(path_to_file):
             if text: 
                 raw_extracted_text += text + "\n"
 
-    return raw_extracted_text
+    return generate(raw_extracted_text)
 
 
-def read_sys_prompt():
-    sys_prmt_file_path = Path(__file__).parent/'ai_system_prompt.txt'
-    with open(sys_prmt_file_path) as file:
-        sys_prmt = file.read()
-    return sys_prmt
 
-
-def generate():
-    load_dotenv()
-    GOOG_API_KEY = os.getenv("GOOG_API_KEY")
-    client = genai.Client(api_key=GOOG_API_KEY)
+def generate(raw_extracted_text):
+    GOOGLE_API_KEY = settings.GOOGLE_API_KEY
+    client = genai.Client(api_key=GOOGLE_API_KEY)
 
     model = "gemini-2.0-flash"
-    contents = parse_resume(Path(__file__).parent/'tests'/'test_resume.pdf')
 
     response = client.models.generate_content(
         model=model,
-        contents=f'Resume is as Follows: \n {contents} \n Parse this resume for me' ,
+        contents=f'Resume is as Follows: \n {raw_extracted_text} \n Parse this resume for me' ,
         config={
             'response_mime_type': 'application/json',
-            'system_instruction': f'{read_sys_prompt()}',
+            'system_instruction': sys_prmpt,
             'response_schema': Resume
         }
     )

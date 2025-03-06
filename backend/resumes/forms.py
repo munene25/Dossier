@@ -4,8 +4,8 @@ from .models import ResumeModel
 class ResumeForm(forms.ModelForm):
     class Meta:
         model = ResumeModel
-        fields = ['pdf_file']
-        labels = {'pdf_file': "Upload Your Resume (PDF Only)"}
+        fields = ['file']
+        labels = {'file': "Upload Your Resume (PDF Only)"}
 
     def clean_pdf_file(self):
         file = self.cleaned_data['pdf_file'] # pdf_file is how we stored it
