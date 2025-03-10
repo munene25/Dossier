@@ -6,14 +6,13 @@ class ResumeModel(models.Model):
         upload_to='resumes/',
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         blank=False,  # This prevents empty values in forms
-        null=False  # Ensures database does not allow NULL
+        null=False  # Ensures database   not allow NULL
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    raw_json = models.JSONField(default=dict)
 
 
-class ResumeDataModel(models.Model):
-    resume = models.OneToOneField(ResumeModel, on_delete=models.CASCADE, related_name='data')
+class DataModel(models.Model):
+    resume_model = models.OneToOneField(ResumeModel, on_delete=models.CASCADE, related_name='data_model')
     user_defined_fields = models.JSONField(default=dict)
     personal_information = models.JSONField(default=dict)
     overview = models.JSONField(default=dict)

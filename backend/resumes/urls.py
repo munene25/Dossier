@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'resumes'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('modify/<int:pk>/', views.modify_personal_information, name='modify_personal_information'),
+    path('', views.upload, name='upload'),
+    path('modify/<int:pk>/<str:category>', views.modify, name='modify'),
 ]

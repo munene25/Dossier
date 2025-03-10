@@ -14,3 +14,44 @@ class ResumeForm(forms.ModelForm):
 
         # We can check for file size later
         return file
+    
+    
+class PersonalInformationForm(forms.Form):
+    UserDefinedField = forms.CharField(
+            label="",
+            widget = forms.TextInput(attrs={'placeholder': 'Category', 'id': 'category'}),
+            required=False
+        )
+    Name = forms.CharField(required=False)
+    Phone = forms.CharField(required=False)
+    Email = forms.CharField(required=False)
+    LinkedIn = forms.CharField(required=False)
+    ExternalLink = forms.CharField(
+            label="External link or Porfolio",
+            widget = forms.TextInput(attrs={'placeholder': 'portfolio.com'}),
+            required=False
+        )
+    
+class OverviewForm(forms.Form):
+    UserDefinedField = forms.CharField(
+            label="",
+            widget = forms.TextInput(attrs={'placeholder': 'Category', 'id': 'category'}),
+            required=False
+        )
+    Text = forms.CharField(
+            label='',
+            required=False,
+            widget=forms.Textarea(attrs={'placeholder': 'Brief Summary of yourself, work-experience, education and related data'}),
+        )
+# class Overview(forms.Form):
+#     UserDefinedField = forms.CharField(
+#             label="",
+#             widget = forms.TextInput(attrs={'placeholder': 'Category', 'id': 'category'}),
+#             required=False
+#         )
+# class Overview(forms.Form):
+#     UserDefinedField = forms.CharField(
+#             label="",
+#             widget = forms.TextInput(attrs={'placeholder': 'Category', 'id': 'category'}),
+#             required=False
+#         )

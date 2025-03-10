@@ -5,29 +5,29 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict
 from django.conf import settings
 
-class _Extras(BaseModel):
+class Extras(BaseModel):
     Category_Name:Optional[str] = None
     Description:Optional[str] = None
     
-class _Skills(BaseModel):
+class Skills(BaseModel):
     Category_Name:Optional[str]
     Description:Optional[list[str]] = None
 
-class _Referees(BaseModel):
+class Referees(BaseModel):
     Name: Optional[str] = None
     Occupation: Optional[str] = None
     Institution: Optional[str] = None
     Phone: Optional[str] = None
     Email: Optional[str] = None
 
-class _Education(BaseModel):
+class Education(BaseModel):
     Institution: Optional[str] = None
     Degree: Optional[str] = None
     Location: Optional[str] = None
     GraduationDate: Optional[str] = None
     Description: Optional[List[str]] = None
 
-class _ProfessionalExperience(BaseModel):
+class ProfessionalExperience(BaseModel):
     JobTitle: Optional[str] = None
     Company: Optional[str] = None
     Location: Optional[str] = None
@@ -35,17 +35,17 @@ class _ProfessionalExperience(BaseModel):
     EndDate: Optional[str] = None
     Responsibilities: Optional[List[str]] = None
 
-class _Overview(BaseModel):
+class Overview(BaseModel):
     Text: str  = None
 
-class _PersonalInformation(BaseModel):
+class PersonalInformation(BaseModel):
     Name: Optional[str] = None
     Phone: Optional[str] = None
     Email: Optional[str] = None
     LinkedIn: Optional[str] = None
     ExternalLink: Optional[str] = None
 
-class _UserDefinedFields(BaseModel):
+class UserDefinedFields(BaseModel):
     PersonalInformation: Optional[str] = None
     Overview: Optional[str] = None
     ProfessionalExperience: Optional[str] = None
@@ -54,16 +54,16 @@ class _UserDefinedFields(BaseModel):
     Referees: Optional[str] = None
 
 class Resume(BaseModel):
-    UserDefinedFields: _UserDefinedFields
-    PersonalInformation: _PersonalInformation
-    Overview: _Overview
-    ProfessionalExperience: List[_ProfessionalExperience]
-    Education: List[_Education]
-    Skills: _Skills
-    Refferees: List[_Referees]
-    Extras: List[_Extras]
-    Certificates: List[str]
-    Languages: List[str]
+    user_defined_fields: UserDefinedFields
+    personal_information: PersonalInformation
+    overview: Overview
+    professional_experience: List[ProfessionalExperience]
+    education: List[Education]
+    skills: Skills
+    referees: List[Referees]
+    extras: List[Extras]
+    certificates: List[str]
+    languages: List[str]
     
     
 sys_prmpt = ''' 

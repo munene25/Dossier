@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
-from .models import ResumeDataModel, ResumeModel
-from .forms import ResumeForm
+from django.http import HttpResponse
+from .models import DataModel, ResumeModel
+from . import forms
 from .utils import parse_resume
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import json
 
-def index(request):
-    context = {'form': ResumeForm()}
+def upload(request):
     if request.method == 'POST':
-        form = ResumeForm(request.POST, request.FILES)
+        form = forms.ResumeForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 new_resume = form.save()
@@ -19,39 +19,65 @@ def index(request):
                 
                 new_resume.raw_json = raw_json
                 new_resume.save()
-                ResumeDataModel.objects.create(
-                    resume=new_resume,
-                    user_defined_fields=raw_json.get("UserDefinedFields", {}),
-                    personal_information=raw_json.get("PersonalInformation", {}),
-                    overview=raw_json.get("Overview", {}),
-                    professional_experience=raw_json.get("ProfessionalExperience", []),
-                    education=raw_json.get("Education", []),
-                    skills=raw_json.get("Skills", {}),
-                    referees=raw_json.get("Referees", []),
-                    extras=raw_json.get("Extras", []),
-                    certificates=raw_json.get("Certificates", []),
-                    languages=raw_json.get("Languages", [])
+                DataModel.objects.create(
+                    resume_model=new_resume,
+                    user_defined_fields=raw_json.get("user_defined_fields", {}),
+                    personal_information=raw_json.get("personal_information", {}),
+                    overview=raw_json.get("overview", {}),
+                    professional_experience=raw_json.get("professional_experience", []),
+                    education=raw_json.get("education", []),
+                    skills=raw_json.get("skills", {}),
+                    referees=raw_json.get("referees", []),
+                    extras=raw_json.get("extras", []),
+                    certificates=raw_json.get("certificates", []),
+                    languages=raw_json.get("languages", [])
                 )
                 messages.success(request, 'File successfully saved.')
-                return redirect(reverse('resumes:modify_personal_information', kwargs={'pk':new_resume.id}))
+                return redirect('resumes:modify', pk=new_resume.id)
             
             except Exception as e:
-                messages.error(request, f'Error: {e}')    
-        return render(request, template_name='resumes/upload.html', context=context)
-    # Render form for both GET and invalid POST cases
+                messages.error(request, f'Error: {e}')
+        messages.error(request, f'Invalid file format')
+    context = {'form': forms.ResumeForm()}
     return render(request, template_name='resumes/upload.html', context=context)
 
 
-def modify_personal_information(request, pk:int):
-    if request.method == 'POST':
-        post_data = request.POST
-        print(post_data)
-        messages.success(request, 'Successful')
-        return redirect(reverse('resumes:index'))
-    resume_object = ResumeModel.objects.get(pk=pk)
-    context = {
-        'resume_id': pk,
-        'user_defined_fields' : resume_object.data.user_defined_fields,
-        'personal_information' : resume_object.data.personal_information
+def modify(request, pk:int, category:str):
+    category_list = {
+            'personal_information': forms.PersonalInformationForm,
+            'overview': forms.OverviewForm,
+            # 'professional_experience': forms.ProfessionalExperienceForm,
+            # 'skills': forms.SkillsForm,
+            # 'education': forms.RefereesForm,
+            # 'extras': forms.RefereesForm,
+            # 'certifications': forms.RefereesForm,
+            # 'languages': forms.RefereesForm
+        }
+    form_class = category_list[category]
+    
+    context={
+        'pk': pk,
+        'category': list(category_list.keys()),
     }
-    return render(request, template_name='resumes/personal_information.html', context=context)
+
+    default_values = {
+        'UserDefinedField': category.replace('_', ' ').title()
+    }
+    if request.method == 'POST':
+        form = form_class(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            user_defined_field = {key: value for key, value in form.cleaned_data.items() if key == 'UserDefinedField'} 
+            category_data = {key: value for key, value in form.cleaned_data.items() if key != 'UserDefinedField'} 
+            return HttpResponse(f'<p>{category_data}<p> <p>{user_defined_field}<p>', status=200)
+        else:
+            return HttpResponse('Nope')
+        
+    if request.method == "GET":
+        resume_object = ResumeModel.objects.get(pk=pk)
+        default_values.update(getattr(resume_object.data_model, category))
+        
+        form = form_class(initial=default_values)
+        context.update({'form': form})
+        return render(request, 'resumes/modify.html', context=context)
+        
