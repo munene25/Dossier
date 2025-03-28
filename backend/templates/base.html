@@ -1,44 +1,32 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body>
     {% if messages %}
+    <div id="flash-container">
         {% for message in messages %}
-            <p> {{ message }}</p>
+        <div class="message {{ message.tags }}">
+            <p>{{ message }}</p>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
         {% endfor %}
-    {% endif %}
-    <div>
-        {% block body %}
-        {% endblock %}
     </div>
-</body>
-</html>
+    {% endif %}
 
-<style>
-    *, ::after, ::before{
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: medium;
-        margin: 0;
-    }
-    div{
-       display: flex;
-       justify-content: flex-start;
-       gap: 2rem;
-       margin: 2rem;
-       font-size: x-large;
-    }
-    #category{
-        border: none;
-        font-size: 2rem;
-        font-weight: 600;
-    }
-    textarea{
-        display: block;
-        width: 100%;
-        padding: 2rem;
-    }
-</style>
+    {% block body %}
+    {% endblock %}
+
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+
+</html>

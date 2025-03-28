@@ -3,7 +3,7 @@
 {% block body %}
     <form method="post" enctype="multipart/form-data" action="{% url 'resumes:upload' %}">
         {% csrf_token %}
-        {{form.as_p}}
+        <div>{{form}}</div>
         <button type="submit">Upload</button>
     </form>
 {% endblock %}

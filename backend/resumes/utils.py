@@ -5,106 +5,107 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict
 from django.conf import settings
 
+
+class Item(BaseModel):
+    item: Optional[str] = None
+
+
 class Extras(BaseModel):
-    Category_Name:Optional[str] = None
-    Description:Optional[str] = None
-    
+    category_name: Optional[str] = None
+    description: Optional[str] = None
+
+
 class Skills(BaseModel):
-    Category_Name:Optional[str]
-    Description:Optional[list[str]] = None
+    category_name: Optional[str]
+    description: Optional[list[str]] = None
+
 
 class Referees(BaseModel):
-    Name: Optional[str] = None
-    Occupation: Optional[str] = None
-    Institution: Optional[str] = None
-    Phone: Optional[str] = None
-    Email: Optional[str] = None
+    name: Optional[str] = None
+    occupation: Optional[str] = None
+    institution: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+
 
 class Education(BaseModel):
-    Institution: Optional[str] = None
-    Degree: Optional[str] = None
-    Location: Optional[str] = None
-    GraduationDate: Optional[str] = None
-    Description: Optional[List[str]] = None
+    institution: Optional[str] = None
+    degree: Optional[str] = None
+    location: Optional[str] = None
+    graduation_date: Optional[str] = None
+    description: Optional[List[str]] = None
+
 
 class ProfessionalExperience(BaseModel):
-    JobTitle: Optional[str] = None
-    Company: Optional[str] = None
-    Location: Optional[str] = None
-    StartDate: Optional[str] = None
-    EndDate: Optional[str] = None
-    Responsibilities: Optional[List[str]] = None
+    job_title: Optional[str] = None
+    company: Optional[str] = None
+    department: Optional[str] = None
+    location: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    responsibilities: Optional[List[str]] = None
+
 
 class Overview(BaseModel):
-    Text: str  = None
+    text: str = None
+
 
 class PersonalInformation(BaseModel):
-    Name: Optional[str] = None
-    Phone: Optional[str] = None
-    Email: Optional[str] = None
-    LinkedIn: Optional[str] = None
-    ExternalLink: Optional[str] = None
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    linkedin: Optional[str] = None
+    external_link: Optional[str] = None
+
 
 class UserDefinedFields(BaseModel):
-    PersonalInformation: Optional[str] = None
-    Overview: Optional[str] = None
-    ProfessionalExperience: Optional[str] = None
-    Education: Optional[str] = None
-    Skills: Optional[str] = None
-    Referees: Optional[str] = None
+    personal_information: Optional[str] = None
+    overview: Optional[str] = None
+    professional_experience: Optional[str] = None
+    education: Optional[str] = None
+    skills: Optional[str] = None
+    referees: Optional[str] = None
+
 
 class Resume(BaseModel):
     user_defined_fields: UserDefinedFields
     personal_information: PersonalInformation
     overview: Overview
-    professional_experience: List[ProfessionalExperience]
     education: List[Education]
-    skills: Skills
+    professional_experience: List[ProfessionalExperience]
+    skills: List[Skills]
     referees: List[Referees]
     extras: List[Extras]
-    certificates: List[str]
-    languages: List[str]
-    
-    
-sys_prmpt = ''' 
-    You are a resume parsing software.You are to extract and structure the data into a JSON format
-    that maintains the original information while categorizing it under relevant sections.
+    certificates: List[Item]
+    languages: List[Item]
 
-    ### **Rules:**
 
-    -   **Matching can be fuzzy**: try to place things in categories through best fit .
+sys_prmpt = """ 
+    You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.
 
-    -   **Map what appears on the user's resume to the template's UserDefinedSections' section**.
-        For example if the resume uses 'Work History' representing 'ProfessionalExperience', then 
-        'ProfessionalExperience': 'Work History'
+### **Rules:**  
+- **Extract only meaningful content**: Ignore section dividers, bullet points, repeated headers, and unnecessary formatting while preserving logical structure.  
+- **Map sections intelligently**: If a resume uses "Work History" instead of "ProfessionalExperience," map it accordingly. If a section is unclear, place it under "Extras."  
+- **Rewrite "Extras" descriptions**: Summarize the "description" field into a natural, concise first-person paragraph(s) for each entry in the category that is clear and easy to read.  
+- **List all certificates**: Include every mentioned certificate under "Certificates."  
+- **Extract each language separately**: Ensure individual entries (e.g., "English," "French").  
+- **Maintain consistency**: Include all predefined sections, even if empty.  
+- **Standardize dates**: Format all dates as "Month, YYYY." If no end date is provided, use "Present."
 
-    -   **Ensure consistency**: If a section is missing in the resume, still include it in the JSON with an empty value.
-    -   **Extras Section** should capture any additional information that absolutely does not fit in:
-                PersonalInformation
-                ProfessionalExperience, 
-                Education,
-                Skills, 
-                Referees.
-            Just for illustration they **could be, but not limited to** the following:
-                Projects,
-                Volunteer-work,
-                Awards,
-                Fellowship,
-                Religion.
 
-'''
+"""
+
 
 def parse_resume(path_to_file):
-    raw_extracted_text = "" 
+    raw_extracted_text = ""
 
     with pdfplumber.open(path_to_file) as pdf:
         for page in pdf.pages:
             text = page.extract_text()
-            if text: 
+            if text:
                 raw_extracted_text += text + "\n"
 
     return generate(raw_extracted_text)
-
 
 
 def generate(raw_extracted_text):
@@ -115,16 +116,15 @@ def generate(raw_extracted_text):
 
     response = client.models.generate_content(
         model=model,
-        contents=f'Resume is as Follows: \n {raw_extracted_text} \n Parse this resume for me' ,
+        contents=f"Resume is as Follows: \n {raw_extracted_text} \n Parse this resume for me",
         config={
-            'response_mime_type': 'application/json',
-            'system_instruction': sys_prmpt,
-            'response_schema': Resume
-        }
+            "response_mime_type": "application/json",
+            "system_instruction": sys_prmpt,
+            "response_schema": Resume,
+        },
     )
     return response.text
 
 
-if(__name__) == '__main__':
+if (__name__) == "__main__":
     print(generate())
-
