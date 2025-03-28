@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %} {% block body %}
 
 <form method="post" action="{% url 'resumes:'|add:category pk=pk %}">
@@ -25,23 +26,21 @@
 		{% for form in formset %}
 		<div class="single-form formset-form">
 
-			<button type="button" class="delete-button" style="background-color:crimson;">DELETE</button>
+			<button type="button" class="delete-button">DELETE</button>
 
 			{{ form }}
 
 		</div>
 		{% endfor %}
-
-		<button type="button" id="add-form" style="background-color:chartreuse;">ADD</button>
+		<button type="button" class="add-button" id="add-form">ADD</button>
 	</div>
 	{% endif %}
 
-
 	<button type="submit" id="form-submit">SUBMIT</button>
-
 </form>
 <div class="nav">
 	{% if back%} <a id="back-category" href="{%url 'resumes:'|add:back pk=pk %}">Back</a> {% endif %}
 	{% if next%} <a id="next-category" href="{%url 'resumes:'|add:next pk=pk %}">Next</a> {% endif %}
 </div>
+
 {% endblock %}

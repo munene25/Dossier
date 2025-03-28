@@ -1,21 +1,20 @@
 from django import forms
-from .models import ResumeModel
 from django.forms import formset_factory
 
+class ResumeUploadForm(forms.Form):
+    pdf_file = forms.FileField(label='Upload file (PDF ONLY)' )
 
-class ResumeForm(forms.ModelForm):
-    class Meta:
-        model = ResumeModel
-        fields = ["file"]
-        labels = {"file": "Upload Your Resume (PDF Only)"}
-
-    def clean_file(self):
-        file = self.cleaned_data["file"]  # pdf_file is how we stored it
-        if file.content_type != "application/pdf":
+    def clean_pdf_file(self):
+        pdf_file = self.cleaned_data["pdf_file"]  # pdf_file is how we stored it
+        if pdf_file.content_type != "application/pdf":
             raise forms.ValidationError("Only PDF Files are Allowed")
 
-        # We can check for file size later
-        return file
+        MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
+        if pdf_file.size > MAX_FILE_SIZE:
+            raise forms.ValidationError("File size must be less than 5MB")
+
+        return pdf_file
 
 
 class UserDefinedFieldForm(forms.Form):
@@ -74,7 +73,7 @@ class EducationForm(forms.Form):
         if isinstance(list_data, list):
             self.initial["description"] = "\n".join(list_data)
 
-    def clean_responsibilities(self):
+    def clean_description(self):
         submited_list_data = self.cleaned_data.get("description", "")
         return submited_list_data.splitlines()
 
@@ -137,7 +136,7 @@ class DescriptionForm(forms.Form):
         if isinstance(list_data, list):
             self.initial["description"] = "\n".join(list_data)
 
-    def clean_responsibilities(self):
+    def clean_description(self):
         submited_list_data = self.cleaned_data.get("description", "")
         return submited_list_data.splitlines()
 

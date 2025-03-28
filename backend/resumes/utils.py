@@ -4,6 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from django.conf import settings
+from .models import ResumeDataModel
 
 
 class Item(BaseModel):
@@ -61,11 +62,13 @@ class PersonalInformation(BaseModel):
 class UserDefinedFields(BaseModel):
     personal_information: Optional[str] = None
     overview: Optional[str] = None
-    professional_experience: Optional[str] = None
     education: Optional[str] = None
+    professional_experience: Optional[str] = None
     skills: Optional[str] = None
     referees: Optional[str] = None
-
+    certificates: Optional[str] = None
+    languages: Optional[str] = None
+    
 
 class Resume(BaseModel):
     user_defined_fields: UserDefinedFields
@@ -79,13 +82,24 @@ class Resume(BaseModel):
     certificates: List[Item]
     languages: List[Item]
 
+class Navigation:
+    personal_information = {"back": None, "next": "overview"}
+    overview = {"back": "personal_information", "next": "education"}
+    education = {"back": "overview", "next": "professional_experience"}
+    professional_experience = {"back": "education", "next": "skills"}
+    skills = {"back": "professional_experience", "next": "referees"}
+    referees = {"back": "skills", "next": "extras"}
+    extras = {"back": "referees", "next": "certificates"}
+    certificates = {"back": "extras", "next": "languages"}
+    languages = {"back": "certificates", "next": None}
+
 
 sys_prmpt = """ 
     You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.
 
 ### **Rules:**  
 - **Extract only meaningful content**: Ignore section dividers, bullet points, repeated headers, and unnecessary formatting while preserving logical structure.  
-- **Map sections intelligently**: If a resume uses "Work History" instead of "ProfessionalExperience," map it accordingly. If a section is unclear, place it under "Extras."  
+- **Map sections intelligently**: If a resume uses "Work History" instead of "ProfessionalExperience," map it accordingly in the UserDefinedFields. If a section is unclear, place it under "Extras."  
 - **Rewrite "Extras" descriptions**: Summarize the "description" field into a natural, concise first-person paragraph(s) for each entry in the category that is clear and easy to read.  
 - **List all certificates**: Include every mentioned certificate under "Certificates."  
 - **Extract each language separately**: Ensure individual entries (e.g., "English," "French").  
@@ -96,10 +110,10 @@ sys_prmpt = """
 """
 
 
-def parse_resume(path_to_file):
+def parse_resume(file_object):
     raw_extracted_text = ""
 
-    with pdfplumber.open(path_to_file) as pdf:
+    with pdfplumber.open(file_object) as pdf:
         for page in pdf.pages:
             text = page.extract_text()
             if text:
@@ -125,6 +139,20 @@ def generate(raw_extracted_text):
     )
     return response.text
 
+def create_resume_object(raw_json):
+    resume = ResumeDataModel.objects.create(
+        user_defined_fields=raw_json.get("user_defined_fields", {}),
+        personal_information=raw_json.get("personal_information", {}),
+        overview=raw_json.get("overview", {}),
+        education=raw_json.get("education", []),
+        professional_experience=raw_json.get("professional_experience", []),
+        skills=raw_json.get("skills", {}),
+        referees=raw_json.get("referees", []),
+        extras=raw_json.get("extras", []),
+        certificates=raw_json.get("certificates", []),
+        languages=raw_json.get("languages", []),
+    )
+    return resume
 
 if (__name__) == "__main__":
     print(generate())
