@@ -1,24 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib import messages
+from django.forms.models import model_to_dict
 from django.views.generic import View
-from .models import ResumeDataModel
-from . import forms
-from . import utils
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import json
+from .models import ResumeDataModel
+from . import utils
+from django.template.loader import render_to_string
 
 
 class UploadView(View):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.context = {"form": forms.ResumeUploadForm}
-
     def get(self, request):
-        return render(request, template_name="upload.html", context=self.context)
+        return render(
+            request,
+            template_name="upload.html",
+            context={"form": utils.FormList.upload},
+        )
 
     def post(self, request):
-        form = forms.ResumeUploadForm(request.POST, request.FILES)
+        form = utils.FormList.upload(request.POST, request.FILES)
 
         if form.is_valid():
             try:
@@ -41,45 +42,25 @@ class UploadView(View):
             messages.error(request, f"Invalid file format")
         return render(request, template_name="upload.html", context=self.context)
 
-
 class BasicFormView(View):
     """Generate forms for Personal Information and Overview"""
 
-    template_name = "modify-form.html"
-    category_list = {
-        "user_defined_field": forms.UserDefinedFieldForm,
-        "personal_information": forms.PersonalInformationForm,
-        "overview": forms.OverviewForm,
-    }
+    template_name = "modify.html"
     category = ""
 
     def dispatch(self, request, *args, **kwargs):
-        self.category_form_class = self.category_list[self.category]
-        self.user_field_form_class = self.category_list["user_defined_field"]
+        self.category_form_class = getattr(utils.FormList, self.category)
+        self.user_field_form_class = getattr(utils.FormList, "user_defined_field")
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-
-        resume_object = ResumeDataModel.objects.get(pk=kwargs.get("pk"))
-        if resume_object:
-            category_data = getattr(resume_object, self.category)
-
-            user_defined_fields = getattr(resume_object, "user_defined_fields")
-
-            self.field_name = user_defined_fields.get(self.category)
-            if self.field_name == None:
-                self.field_name = self.category.title().replace("_", " ")
-
-            user_field_form = self.user_field_form_class(
-                initial={"user_defined_field": self.field_name}
-            )
-            category_form = self.category_form_class(category_data)
-
-        else:
-            category_form = self.category_form_class()
-            user_field_form = self.user_field_form_class(
-                initial={"user_defined_field": self.field_name}
-            )
+        pk = kwargs.get("pk")
+        resume_object = get_object_or_404(ResumeDataModel, pk=pk)
+        resume_data = utils.get_resume_data(resume_object ,self.category)
+        user_field_form = self.user_field_form_class(
+            initial={"user_defined_field": resume_data["field_name"]}
+        )
+        category_form = self.category_form_class(resume_data["category_data"])
         context = {
             "user_field_form": user_field_form,
             "form": category_form,
@@ -90,60 +71,37 @@ class BasicFormView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         category_form = self.category_form_class(request.POST)
         user_field_form = self.user_field_form_class(request.POST)
-        
-        category_data = clean_form(category_form)
-        user_data = clean_form(user_field_form)
-        update_resume(self.category, pk, category_data, user_data)
-        return redirect(f"resumes:{self.category}", pk=pk)
 
+        category_data = utils.clean_form(category_form)
+        user_data = utils.clean_form(user_field_form)
+        utils.update_resume(self.category, pk, category_data, user_data)
+        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk=pk)
 
 
 class FormsetView(View):
     """Generate forms for Personal Information and Overview"""
 
-    template_name = "modify-form.html"
-    category_list = {
-        "user_defined_field": forms.UserDefinedFieldForm,
-        "education": forms.EducationForm,
-        "professional_experience": forms.ProfessionalExperienceForm,
-        "skills": forms.DescriptionForm,
-        "referees": forms.RefereesForm,
-        "extras": forms.DescriptionForm,
-        "certificates": forms.ItemForm,
-        "languages": forms.ItemForm,
-    }
+    template_name = "modify.html"
     category = ""
 
     def dispatch(self, request, *args, **kwargs):
-        self.category_form_class = self.category_list[self.category]
-        self.CategoryFormSet = forms.formset_factory(self.category_form_class, extra=1)
-        self.user_field_form_class = self.category_list["user_defined_field"]
+        self.category_form_class = getattr(utils.FormList, self.category)
+        self.CategoryFormSet = utils.formset_factory(self.category_form_class, extra=1)
+        self.user_field_form_class = getattr(utils.FormList, "user_defined_field")
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, **kwargs):
         pk = kwargs.get("pk")
-        resume_object = ResumeDataModel.objects.get(pk=pk)
+        resume_object = get_object_or_404(ResumeDataModel, pk=pk)
+        resume_data = utils.get_resume_data(resume_object ,self.category)
 
-        if resume_object:
-            category_data = getattr(resume_object, self.category)
-
-            user_defined_fields = getattr(resume_object, "user_defined_fields")
-            self.user_defined_field = user_defined_fields.get(self.category)
-            if self.user_defined_field == None:
-                self.user_defined_field = self.category.title().replace("_", " ")
-            category_form = self.CategoryFormSet(initial=category_data)
-            user_field_form = self.user_field_form_class(
-                initial={"user_defined_field": self.user_defined_field}
-            )
-
-        else:
-            category_form = self.CategoryFormSet()
-            user_field_form = self.user_field_form_class(
-                initial={"user_defined_field": self.user_defined_field}
-            )
+        category_form = self.CategoryFormSet(initial=resume_data["category_data"])
+        user_field_form = self.user_field_form_class(
+            initial={"user_defined_field": resume_data["field_name"]}
+        )
         context = {
             "user_field_form": user_field_form,
             "formset": category_form,
@@ -158,47 +116,22 @@ class FormsetView(View):
         category_formset = self.CategoryFormSet(request.POST)
         user_field_form = self.user_field_form_class(request.POST)
 
-        # Collect submitted data without saving
+        category_data = utils.clean_formset(category_formset)
+        user_data = utils.clean_form(user_field_form)
 
-        category_data = clean_formset(category_formset)
-        user_data = clean_form(user_field_form)
-
-        update_resume(self.category, pk, category_data, user_data)
+        utils.update_resume(self.category, pk, category_data, user_data)
         messages.success(request, "Successfully Updated")
-        return redirect(f"resumes:{self.category}", pk=pk)
+        if self.category == 'languages':
+            return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['finish']}", pk=pk)
+
+        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk=pk)
 
 
-def update_resume(category: str, pk: int, data: any, user_defined_data: dict):
-    resume = ResumeDataModel.objects.get(pk=pk)
-    updated = False  # Track if any changes were made
-
-    # Update JSON field safely
-    if category in resume.user_defined_fields:
-        resume.user_defined_fields[category] = user_defined_data.get('user_defined_field', None)
-        updated = True
-
-    # Update model attribute if it exists
-    if hasattr(resume, category):
-        setattr(resume, category, data)
-        updated = True
-
-    # Save only if something was modified
-    if updated:
-        resume.save()
-
-    return updated
-
-
-
-def clean_form(form):
-    return form.cleaned_data if form.is_valid() else form.errors
-
-        
-def clean_formset(formset):
-    if formset.is_valid():
-        return [
-            form for form in formset.cleaned_data if any(form.values())
-        ]
-    else:
-        return formset.errors
-        
+def render_resume(request, *args ,**kwargs):
+    resume = get_object_or_404(ResumeDataModel, pk=kwargs.get("pk"))
+    resume_dict = model_to_dict(resume)
+    html_string = render_to_string('render_resume.html', {"data": resume_dict})
+    with open("input.html", "w")as file:
+        file.write(html_string)
+    utils.print_pdf()
+    return render(request, 'render_resume.html', {"data": resume_dict})

@@ -50,4 +50,9 @@ urlpatterns = [
         views.FormsetView.as_view(category="languages"),
         name="languages",
     ),
+    path(
+        "render-resume/<int:pk>",
+        views.render_resume,
+        name="render_resume",
+    ),
 ]

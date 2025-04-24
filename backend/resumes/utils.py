@@ -5,6 +5,10 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict
 from django.conf import settings
 from .models import ResumeDataModel
+from . import forms
+from weasyprint import HTML
+from django.forms import formset_factory
+
 
 
 class Item(BaseModel):
@@ -91,8 +95,20 @@ class Navigation:
     referees = {"back": "skills", "next": "extras"}
     extras = {"back": "referees", "next": "certificates"}
     certificates = {"back": "extras", "next": "languages"}
-    languages = {"back": "certificates", "next": None}
+    languages = {"back": "certificates", "finish": "render_resume"}
 
+class FormList:
+    user_defined_field = forms.UserDefinedFieldForm
+    education = forms.EducationForm
+    professional_experience = forms.ProfessionalExperienceForm
+    skills = forms.DescriptionForm
+    referees = forms.RefereesForm
+    extras = forms.DescriptionForm
+    certificates = forms.ItemForm
+    languages = forms.ItemForm
+    personal_information = forms.PersonalInformationForm
+    overview = forms.OverviewForm
+    upload = forms.ResumeUploadForm
 
 sys_prmpt = """ 
     You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.
@@ -152,7 +168,59 @@ def create_resume_object(raw_json):
         certificates=raw_json.get("certificates", []),
         languages=raw_json.get("languages", []),
     )
+    for key, value in resume.user_defined_fields.items():
+        print(f"{key} : {value}")
+        if value is None:
+            resume.user_defined_fields[key] = key.replace("_", " ").title()
+    resume.save()
     return resume
 
+def get_resume_data(resume_object, category):
+    category_data = getattr(resume_object, category)
+    if resume_object.user_defined_fields:
+        if category != "extras":
+            field_name = resume_object.user_defined_fields[category]
+        else:
+            field_name = 'Extras'
+    else:
+        field_name = ''
+        category_data = {}
+    return {"field_name": field_name, "category_data": category_data}
+
+def update_resume(category: str, pk: int, data: any, user_defined_data: dict):
+    resume = ResumeDataModel.objects.get(pk=pk)
+    updated = False  # Track if any changes were made
+
+    # Update JSON field safely
+    if category in resume.user_defined_fields:
+        resume.user_defined_fields[category] = user_defined_data.get('user_defined_field', None)
+        updated = True
+
+    # Update model attribute if it exists
+    if hasattr(resume, category):
+        setattr(resume, category, data)
+        updated = True
+
+    # Save only if something was modified
+    if updated:
+        resume.save()
+
+    return updated
+
+def clean_form(form):
+    return form.cleaned_data if form.is_valid() else form.errors
+
+        
+def clean_formset(formset):
+    if formset.is_valid():
+        return [
+            form for form in formset.cleaned_data if any(form.values())
+        ]
+    else:
+        return formset.errors
+        
+def print_pdf():
+    HTML('input.html').write_pdf('output.pdf')
+
 if (__name__) == "__main__":
-    print(generate())
+    pass

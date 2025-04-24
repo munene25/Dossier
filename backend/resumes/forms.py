@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import formset_factory
 
 class ResumeUploadForm(forms.Form):
     pdf_file = forms.FileField(label='Upload file (PDF ONLY)' )
@@ -19,7 +18,7 @@ class ResumeUploadForm(forms.Form):
 
 class UserDefinedFieldForm(forms.Form):
     user_defined_field = forms.CharField(
-        label="Section",
+        label="",
         widget=forms.TextInput(attrs={"placeholder": "Category"}),
         required=False,
     )
