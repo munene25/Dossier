@@ -24,23 +24,27 @@ class UploadView(View):
         if form.is_valid():
             try:
                 file_data = form.cleaned_data["pdf_file"]
+                raw_json = json.loads(utils.parse_resume(file_data))
             except Exception as e:
                 messages.error(request, f"Error: {e}")
-
-            raw_json = json.loads(utils.parse_resume(file_data))
             if raw_json:
-                resume = utils.create_resume_object(raw_json)
+                #Get Logged in user and create entry on the resume model and link them
+                user = request.user
+                resume_object = utils.create_resume_object(user, raw_json)
                 messages.success(request, "File successfully saved.")
-                return redirect("resumes:personal_information", pk=resume.pk)
+                
+                request.session["resume_id"] = resume_object.id
+                return redirect("resumes:personal_information")
             else:
                 messages.error(
                     request,
-                    f"Error: {'Could Not parse document at this time, check your file type or try again later'}",
+                    "Error: {'Could Not parse document at this time, check your file type or try again later'}",
                 )
 
         else:
             messages.error(request, f"Invalid file format")
-        return render(request, template_name="upload.html", context=self.context)
+
+        return render(request, template_name="upload.html", context={"form": utils.FormList.upload})
 
 class BasicFormView(View):
     """Generate forms for Personal Information and Overview"""
@@ -54,9 +58,9 @@ class BasicFormView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
+        pk = request.session.get("resume_id")
         resume_object = get_object_or_404(ResumeDataModel, pk=pk)
-        resume_data = utils.get_resume_data(resume_object ,self.category)
+        resume_data = utils.get_resume_data(resume_object, self.category)
         user_field_form = self.user_field_form_class(
             initial={"user_defined_field": resume_data["field_name"]}
         )
@@ -65,20 +69,19 @@ class BasicFormView(View):
             "user_field_form": user_field_form,
             "form": category_form,
             "category": self.category,
-            "pk": kwargs.get("pk"),
         }
         context.update(getattr(utils.Navigation(), self.category))
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
+        pk = request.session.get("resume_id")
         category_form = self.category_form_class(request.POST)
         user_field_form = self.user_field_form_class(request.POST)
 
         category_data = utils.clean_form(category_form)
         user_data = utils.clean_form(user_field_form)
         utils.update_resume(self.category, pk, category_data, user_data)
-        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk=pk)
+        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}")
 
 
 class FormsetView(View):
@@ -94,7 +97,7 @@ class FormsetView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, **kwargs):
-        pk = kwargs.get("pk")
+        pk = request.session.get("resume_id")
         resume_object = get_object_or_404(ResumeDataModel, pk=pk)
         resume_data = utils.get_resume_data(resume_object ,self.category)
 
@@ -106,13 +109,12 @@ class FormsetView(View):
             "user_field_form": user_field_form,
             "formset": category_form,
             "category": self.category,
-            "pk": pk,
         }
         context.update(getattr(utils.Navigation(), self.category))
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, **kwargs):
-        pk = kwargs.get("pk")
+        pk = request.session.get("resume_id")
         category_formset = self.CategoryFormSet(request.POST)
         user_field_form = self.user_field_form_class(request.POST)
 
@@ -122,16 +124,22 @@ class FormsetView(View):
         utils.update_resume(self.category, pk, category_data, user_data)
         messages.success(request, "Successfully Updated")
         if self.category == 'languages':
-            return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['finish']}", pk=pk)
+            return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['finish']}")
 
-        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk=pk)
+        return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}")
 
 
 def render_resume(request, *args ,**kwargs):
-    resume = get_object_or_404(ResumeDataModel, pk=kwargs.get("pk"))
+    resume = get_object_or_404(ResumeDataModel, pk=request.session.get("resume_id"))
     resume_dict = model_to_dict(resume)
     html_string = render_to_string('render_resume.html', {"data": resume_dict})
     with open("input.html", "w")as file:
         file.write(html_string)
     utils.print_pdf()
     return render(request, 'render_resume.html', {"data": resume_dict})
+
+def create(request):
+    pass
+
+class ModifyView(View):
+    pass

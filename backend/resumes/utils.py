@@ -56,7 +56,9 @@ class Overview(BaseModel):
 
 
 class PersonalInformation(BaseModel):
-    name: Optional[str] = None
+    first_name: Optional[str] = None 
+    last_name: Optional[str] = None 
+    career: Optional[str] = None 
     phone: Optional[str] = None
     email: Optional[str] = None
     linkedin: Optional[str] = None
@@ -155,8 +157,9 @@ def generate(raw_extracted_text):
     )
     return response.text
 
-def create_resume_object(raw_json):
+def create_resume_object(user, raw_json):
     resume = ResumeDataModel.objects.create(
+        user = user,
         user_defined_fields=raw_json.get("user_defined_fields", {}),
         personal_information=raw_json.get("personal_information", {}),
         overview=raw_json.get("overview", {}),

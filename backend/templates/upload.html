@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block body %}
-    <form method="post" enctype="multipart/form-data" action="{% url 'resumes:upload' %}">
+{% block content %}
+    <form class="edit-forms" method="post" enctype="multipart/form-data" action="{% url 'resumes:upload' %}">
         {% csrf_token %}
         <h1>Upload your File to get started!</h1>
         <div class="single-form">{{form}}</div>

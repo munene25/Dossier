@@ -18,7 +18,7 @@
     <div id="flash-container">
         {% for message in messages %}
         <div class="message {{ message.tags }}">
-            <p>{{ message }}</p>
+            <p class="message-p">{{ message }}</p>
             <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
         </div>
         {% endfor %}

@@ -1,6 +1,6 @@
-{% extends 'base.html' %} {% block body %}
+{% extends 'dashboard.html' %} {% block content %}
 
-<form method="post" action="{% url 'resumes:'|add:category pk=pk %}">
+<form class="edit-forms" method="post" action="{% url 'resumes:'|add:category %}">
 	<!-- ----------------------------------- CSRF token ----------------------------------- -->
 	{% csrf_token %}
 
@@ -40,11 +40,11 @@
 	</div>
 	{% endif %}
 		
-	<div class="nav">
-		{% if back%} <a id="back-category" href="{%url 'resumes:'|add:back pk=pk %}">Back</a> {% endif %}
+	<div class="link-container">
+		{% if back%} <a id="back-category" href="{%url 'resumes:'|add:back %}">Back</a> {% endif %}
 		<button type="submit" id="form-submit">Submit</button>
-		{% if next%} <a id="next-category" href="{%url 'resumes:'|add:next pk=pk %}">Next</a> {% endif %}
-		{% if finish%} <a id="next-category" href="{%url 'resumes:'|add:finish pk=pk %}">Finish</a> {% endif %}
+		{% if next%} <a id="next-category" href="{%url 'resumes:'|add:next %}">Next</a> {% endif %}
+		{% if finish%} <a id="next-category" href="{%url 'resumes:'|add:finish %}">Finish</a> {% endif %}
 	</div>
 </form>
 

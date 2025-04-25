@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mika Marque - Graphic Designer</title>
+    <title>{{data.personal_information.first_name}} {{data.personal_information.last_name}} - {{data.personal_information.career}}</title>
     <style>
         @page {
             size: A4;
@@ -38,7 +38,7 @@
         }
         .main-section{
             width: 100%;
-            height: 15rem;
+            height: 12rem;
             
         }
         .orange{
@@ -50,7 +50,7 @@
         
         .profile-header {
             display: inline-block;
-            width: 5rem;
+            width: 10rem;
             height: 100%;
             margin-left: 2rem;
         }
@@ -59,18 +59,22 @@
             margin: 0;
             color: #333;
             text-transform: uppercase;
-            text-wrap: wrap;
-
-            font-size: 3em;
-            font-weight: 500;
+            font-size: 3rem;
             letter-spacing: 0.8px;
         }
-
+        .profile-header .first-name{
+            font-weight: 600;
+        }
+        .profile-header .last-name{
+            font-weight: 200;
+        }
         .profile-header p {
+            margin-top: 1.2em;
             color: #777;
-
+            width: fit-content;
             font-size: 1.1em;
             letter-spacing: 0.8px;
+
         }
         .contact-section svg{
             width: 1rem;
@@ -125,15 +129,12 @@
             font-weight: 500;
             color: #333;
         }
-
-
         .work-item {
             display: grid;
             grid-template-columns: 1.2fr 0.2fr  1.8fr;
             padding-bottom: 10px;
             margin-bottom: 10px;
             align-items: start;
-            border-bottom: #7777772c solid 2px;
         }
         .company strong{
             color: #555;
@@ -370,8 +371,9 @@
             <div class="profile-block">
                 <div class="main-section">
                     <div class="profile-header">
-                        <h1>{{data.personal_information.name}}</h1>
-                        <p>WEB DEVELOPER</p>
+                        <h1 class="first-name">{{data.personal_information.first_name}}</h1>
+                        <h1 class="last-name">{{data.personal_information.last_name}}</h1>
+                        <p>{{data.personal_information.career}}</p>
                     </div>
                     <div class="orange"></div>
                 </div>

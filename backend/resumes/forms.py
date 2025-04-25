@@ -25,12 +25,18 @@ class UserDefinedFieldForm(forms.Form):
 
 
 class PersonalInformationForm(forms.Form):
-    name = forms.CharField(required=False)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    career = forms.CharField(
+        label="Career Field",
+        widget=forms.TextInput(attrs={"placeholder": "Career"}),
+        required=True,
+    )
     phone = forms.CharField(required=False)
     email = forms.CharField(required=False)
     linkedin = forms.CharField(required=False)
     external_link = forms.CharField(
-        label="External link or Porfolio",
+        label="Porfolio",
         widget=forms.TextInput(attrs={"placeholder": "portfolio.com"}),
         required=False,
     )

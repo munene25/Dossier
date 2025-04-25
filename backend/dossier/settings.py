@@ -89,7 +89,7 @@ DATABASES = {
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(BASE_DIR) / "media"
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Password validation
@@ -140,3 +140,7 @@ load_dotenv()  # in development
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     raise ValueError("GOOGLE KEY NOT FOUND")
+
+LOGIN_URL = "users:login"
+LOGOUT_REDIRECT_URL = "users:login"
+LOGIN_REDIRECT_URL = "users:dashboard"
