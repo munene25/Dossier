@@ -111,6 +111,7 @@ class FormList:
     personal_information = forms.PersonalInformationForm
     overview = forms.OverviewForm
     upload = forms.ResumeUploadForm
+    nav_form = forms.NavForm
 
 sys_prmpt = """ 
     You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.

@@ -1,0 +1,59 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+{% if resumes %}
+
+<section class="manage">
+    <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Resume</td>
+                <td>Created_at</td>
+                <td>Edit</td>
+                <td>Preview</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resume in resumes %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ resume.personal_information.first_name }} {{ resume.personal_information.last_name }} </td>
+                <td>{{ resume.created_at }}</td>
+                <td>
+                    <form action="{% url 'resumes:select_resume' %}" method="post">
+                        {% csrf_token %}
+                        <input name="resume_id" type="hidden" value="{{ resume.id }}">
+                        <input name="next_url" type="hidden" value="personal_information">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'resumes:select_resume' %}" method="post">
+                        {% csrf_token %}
+                        <input name="resume_id" type="hidden" value="{{ resume.id }}">
+                        <input name="next_url" type="hidden" value="render_resume">
+                        <button type="submit">Preview</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'resumes:delete' resume.id %}" method="get">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+{% else %}
+<h2>
+    You have not created a resume yet.
+</h2>
+<p><a href="{% url 'resumes:upload' %}"> Upload</a> an existing resume or <a href="{% url 'resumes:create' %}">Create</a> one</p>
+{% endif %}
+
+{% endblock %}

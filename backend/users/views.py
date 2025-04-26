@@ -21,7 +21,10 @@ class SignUpView(generic.CreateView):
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     def get(self, request, *args, **kwargs):
-        resume_object = ResumeDataModel.objects.filter(user=request.user).latest("id")
-        request.session["resume_id"] = resume_object.id
+        try:
+            resume_object = ResumeDataModel.objects.filter(user=request.user).latest("id")
+            request.session["resume_id"] = resume_object.id
+        except:
+            resume_object = None
         return super().get(request, *args, **kwargs)
     template_name = 'welcome.html'

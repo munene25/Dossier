@@ -10,7 +10,7 @@
     <style>
         @page {
             size: A4;
-            margin: 1cm;
+            margin: 0.5cm;
         }
         *{
             box-sizing: border-box;
@@ -38,10 +38,17 @@
         }
         .main-section{
             width: 100%;
-            height: 12rem;
+            min-height: 10rem;
+            height: 15rem;
+            max-height: 15rem;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            align-items: center;
             
         }
         .orange{
+            display: inline;
             width: 6rem;
             height: 100%;
             background-color: #ff9900;
@@ -51,11 +58,12 @@
         .profile-header {
             display: inline-block;
             width: 10rem;
-            height: 100%;
-            margin-left: 2rem;
+            height: fit-content;
+            margin-left: 2.5rem;
         }
 
         .profile-header h1 {
+            width: fit-content;
             margin: 0;
             color: #333;
             text-transform: uppercase;
@@ -77,9 +85,10 @@
 
         }
         .contact-section svg{
-            width: 1rem;
-            height: 1rem;
-            vertical-align: middle;
+            width: 15px;
+            height: 15px;
+            vertical-align: top;
+
         }
         .contact-section  div{
             display: flex;
@@ -413,7 +422,7 @@
             </div>
             {% endif %}
             
-            {% if data.overview%}
+            {% if data.overview.text %}
             <div class="overview-section">
                 <h2>{{data.user_defined_fields.overview}}</h2>
                 <p>{{data.overview.text}}</p>

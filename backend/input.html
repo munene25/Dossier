@@ -6,11 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>John Doe - Software Dev</title>
+    <title>Edwin Njue - Civil Engineer | Software Developer</title>
     <style>
         @page {
             size: A4;
-            margin: 1cm;
+            margin: 0.5cm;
         }
         *{
             box-sizing: border-box;
@@ -38,10 +38,17 @@
         }
         .main-section{
             width: 100%;
-            height: 12rem;
+            min-height: 10rem;
+            height: 15rem;
+            max-height: 15rem;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            align-items: center;
             
         }
         .orange{
+            display: inline;
             width: 6rem;
             height: 100%;
             background-color: #ff9900;
@@ -51,11 +58,12 @@
         .profile-header {
             display: inline-block;
             width: 10rem;
-            height: 100%;
-            margin-left: 2rem;
+            height: fit-content;
+            margin-left: 2.5rem;
         }
 
         .profile-header h1 {
+            width: fit-content;
             margin: 0;
             color: #333;
             text-transform: uppercase;
@@ -77,9 +85,10 @@
 
         }
         .contact-section svg{
-            width: 1rem;
-            height: 1rem;
-            vertical-align: middle;
+            width: 15px;
+            height: 15px;
+            vertical-align: top;
+
         }
         .contact-section  div{
             display: flex;
@@ -129,8 +138,6 @@
             font-weight: 500;
             color: #333;
         }
-
-
         .work-item {
             display: grid;
             grid-template-columns: 1.2fr 0.2fr  1.8fr;
@@ -314,20 +321,86 @@
     <div class="container">
         <div class="right-section">
             <div class="education-section">
-                <h2>Education</h2>
+                <h2>ACADEMIC BACKGROUND</h2>
                 
                     <div class="education-item">
-                        <h3>Master of Science in Computer Science</h3>
-                        <p>Stanford University  - Stanford, CA   - <i class="date">May, 2015</i>  </p>
+                        <h3>Certificate in CS50x Introduction to Computer Science</h3>
+                        <p>Harvard University   - <i class="date">Present</i>  </p>
                         <ul>
+                            
+                                <li>Algorithmic thinking and problem-solving strategies using C and Python.</li>
+                            
+                                <li>Web development using HTML, CSS, JavaScript, and SQL.</li>
+                            
+                                <li>Git version control.</li>
+                            
+                                <li>UI/UX Design.</li>
+                            
+                                <li>Security and Cybersecurity: encryption, authentication, and network security.</li>
                             
                         </ul>
                     </div>
                 
                     <div class="education-item">
-                        <h3>Bachelor of Science in Computer Science</h3>
-                        <p>University of California, Berkeley  - Berkeley, CA   - <i class="date">May, 2013</i>  </p>
+                        <h3>Bachelor of Science Degree in Civil Engineering</h3>
+                        <p>Kenyatta University   - <i class="date">December, 2022</i>  </p>
                         <ul>
+                            
+                                <li>Structural design (Steel, Timber and Concrete)</li>
+                            
+                                <li>Project Management</li>
+                            
+                                <li>Water Resource Management</li>
+                            
+                                <li>Public Health Engineering</li>
+                            
+                                <li>Irrigation Engineering</li>
+                            
+                                <li>Economics and statistics</li>
+                            
+                                <li>AutoCAD, AutoCAD Civil 3D, Revit</li>
+                            
+                                <li>Fieldwork, Lab tests, analysis and report writing</li>
+                            
+                                <li>Surveying</li>
+                            
+                        </ul>
+                    </div>
+                
+                    <div class="education-item">
+                        <h3>Certificate in Computer Programming</h3>
+                        <p>Institute of Advanced Technology (IAT)   - <i class="date">March, 2016</i>  </p>
+                        <ul>
+                            
+                                <li>Microsoft Word</li>
+                            
+                                <li>Microsoft Excel</li>
+                            
+                                <li>Microsoft PowerPoint</li>
+                            
+                                <li>C++ Programming</li>
+                            
+                                <li>Database Creation and management with MySQL</li>
+                            
+                        </ul>
+                    </div>
+                
+                    <div class="education-item">
+                        <h3>Kenya Certificate of Secondary Education (KCSE)</h3>
+                        <p>Pioneer School   - <i class="date">November, 2015</i>  </p>
+                        <ul>
+                            
+                                <li>Passed attaining a mean grade of A.</li>
+                            
+                        </ul>
+                    </div>
+                
+                    <div class="education-item">
+                        <h3>Kenya Certificate of Primary Education (KCPE)</h3>
+                        <p>Thomas Burke Primary School   - <i class="date">November, 2011</i>  </p>
+                        <ul>
+                            
+                                <li>Grade A in English and Kiswahili languages, A- in sciences.</li>
                             
                         </ul>
                     </div>
@@ -336,15 +409,15 @@
 
             
             <div class="languages-section">
-                <h2>Languages</h2>
+                <h2>LANGUAGES</h2>
                 <ul>
                     
                     
-                        <li>English (Native)</li>
+                        <li>English</li>
                     
                     
                     
-                        <li>Spanish (Conversational)</li>
+                        <li>Swahili</li>
                     
                     
                 </ul>
@@ -353,15 +426,15 @@
 
             
             <div class="certificates-section">
-                <h2>Awards and Recognition</h2>
+                <h2>Certificates</h2>
                 <ul>
                     
                     
-                        <li>Dean&#x27;s List, Stanford University, 2014-2015</li>
+                        <li>Certificate in CS50x Introduction to Computer Science</li>
                     
                     
                     
-                        <li>Employee of the Month, Acme Corporation, March 2019</li>
+                        <li>Certificate in Computer Programming</li>
                     
                     
                 </ul>
@@ -370,12 +443,26 @@
 
             
             <div class="referees-section">
-                <h2>Referees</h2>
+                <h2>REFEREES</h2>
                 
                     <div class="referee-item">
-                        <h3>Florence wanjiru Njue</h3>
-                        <p class="title">   </p>
+                        <h3>James Gichengo</h3>
+                        <p class="title">  Principal   - Pioneer High School, Muranga  </p>
+                        <p class="phone">+254 700 372 351</p> 
+                         <a class="email" href="mailto:info@pioneerschools.ac.ke">info@pioneerschools.ac.ke</a> 
+                    </div>
+                
+                    <div class="referee-item">
+                        <h3>Joshua Kidiga</h3>
+                        <p class="title">  Senior Engineer   - Brickstone Engineering, Nairobi  </p>
+                        <p class="phone">+254 768 503 015</p> 
                         
+                    </div>
+                
+                    <div class="referee-item">
+                        <h3>Peter Kiarie</h3>
+                        <p class="title">  Supervisor   - Unity Homes, Kiambu  </p>
+                        <p class="phone">+254 716 150 209</p> 
                         
                     </div>
                 
@@ -387,9 +474,9 @@
             <div class="profile-block">
                 <div class="main-section">
                     <div class="profile-header">
-                        <h1 class="first-name">John</h1>
-                        <h1 class="last-name">Doe</h1>
-                        <p>Software Dev</p>
+                        <h1 class="first-name">Edwin</h1>
+                        <h1 class="last-name">Njue</h1>
+                        <p>Civil Engineer | Software Developer</p>
                     </div>
                     <div class="orange"></div>
                 </div>
@@ -399,13 +486,13 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                           </svg>
-                        <p>(123) 456-7890</p>
+                        <p>+254 791 573 104</p>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
                           </svg>
-                        <a href="mailto:john.doe@email.com">john.doe@email.com</a>
+                        <a href="mailto:edmune25@gmail.com">edmune25@gmail.com</a>
                     </div>
                     
                     
@@ -413,17 +500,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
                           </svg>
-                        <a href="http://linkedin.com/in/johndoe">linkedin.com/in/johndoe</a>
+                        <a href="http://edmunene25-llinkedin">edmunene25-llinkedin</a>
                     </div>
                     
 
-                     
-                        <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                              </svg>
-                            <a href="http://johndoe.portfolio.com">johndoe.portfolio.com</a> 
-                        </div>    
                     
                 </div>
             </div>
@@ -431,35 +511,33 @@
             
             
             <div class="overview-section">
-                <h2>Summary</h2>
-                <p>Highly motivated and results-oriented software engineer with 5+ years of experience in developing and maintaining web applications. Proven ability to collaborate effectively in team environments, deliver high-quality code, and adapt quickly to new technologies. Passionate about building innovative and user-friendly software solutions. Seeking a challenging role where I can contribute to the growth of a dynamic organization.</p>
+                <h2>KEY PROFESSIONAL SKILLS</h2>
+                <p>High-achieving professional with expertise in geotechnical and civil engineering. Demonstrated success working in team-driven environments to meet challenging targets and timelines on simultaneous priority projects. Skilled in geotechnical design, field investigation with geophysical methods, documentation of the work, and synthesizing technical interpretations and conclusions. Well-versed in conducting research, engaging in lab testing, and troubleshooting and resolving technical issues. Currently working toward licensure as a professional engineer.</p>
             </div>
             
 
             
             <div class="work-experience-section">
-                <h2>Experience</h2>
+                <h2>CAREER PATH</h2>
                 
                 <div class="work-item">
                     <div>
-                        <h3>Senior Software Engineer</h3>
-                        <p class="date">June, 2018 - Present</p>
+                        <h3>Part time attaché</h3>
+                        <p class="date">January, 2023 - Present</p>
                     </div>
                     <div class="separator"></div>
                     <div>
-                        <p class="company"> <strong>Acme Corporation</strong>  </p>
-                         <p class="company"><i>Anytown, CA</i> </p>
+                        <p class="company"> <strong>Brickstone Engineering, Civil Engineering Department</strong>  </p>
+                        
                         <ul>
                             
-                                <li>Led the development of a new e-commerce platform, resulting in a 20% increase in online sales within the first quarter. Utilized Python, Django, and React.js.</li>
+                                <li>Project oversight</li>
                             
-                                <li>Mentored junior developers, providing guidance on best practices and code reviews.</li>
+                                <li>Materials’ tests and analysis</li>
                             
-                                <li>Implemented automated testing frameworks, improving code quality and reducing bug rates by 15%.</li>
+                                <li>Supervision of construction works</li>
                             
-                                <li>Collaborated with product managers and designers to define project requirements and deliver user-centered solutions.</li>
-                            
-                                <li>Deployed and maintained applications on AWS, utilizing services like EC2, S3, and Lambda.</li>
+                                <li>Drafting AutoCAD drawings</li>
                             
                         </ul>
                     </div>
@@ -467,24 +545,22 @@
                 
                 <div class="work-item">
                     <div>
-                        <h3>Software Engineer</h3>
-                        <p class="date">January, 2016 - June, 2018</p>
+                        <h3>Intern</h3>
+                        <p class="date">February, 2021 - May, 2021</p>
                     </div>
                     <div class="separator"></div>
                     <div>
-                        <p class="company"> <strong>Beta Solutions</strong>  </p>
-                         <p class="company"><i>Anytown, CA</i> </p>
+                        <p class="company"> <strong>Unity Homes, Quality Assessment &amp; Quality Control Department</strong>  </p>
+                        
                         <ul>
                             
-                                <li>Developed and maintained web applications using Java, Spring Boot, and AngularJS.</li>
+                                <li>Conducting survey works</li>
                             
-                                <li>Contributed to the design and implementation of RESTful APIs.</li>
+                                <li>Quality of work assessment and statistical method reporting</li>
                             
-                                <li>Worked in an Agile environment, participating in sprint planning, daily stand-ups, and retrospectives.</li>
+                                <li>Data collection and analysis of works and materials</li>
                             
-                                <li>Successfully delivered multiple projects on time and within budget.</li>
-                            
-                                <li>Gained experience in database management using MySQL and PostgreSQL</li>
+                                <li>Lab Tests and Analysis</li>
                             
                         </ul>
                     </div>
@@ -494,88 +570,11 @@
             
             
             <div class="skills-section">
-                <h2>Skills</h2>
+                <h2>CORE COMPETENCIES</h2>
                 
                 
                 
-                 <h3>Programming Languages</h3>
-                
-                
-                
-                <div class="skills-list">
-                    <ul>
-                        
-                        <li>
-                            <span>
-                                Python
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                Java
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                JavaScript
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                C++
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                Go
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                HTML
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <span>
-                                CSS
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                    </ul>
-                </div>
-                
-                
-                
-                
-                
-                 <h3>Frameworks/Libraries</h3>
+                 <h3>Skills</h3>
                 
                 
                 
@@ -584,7 +583,7 @@
                         
                         <li>
                             <span>
-                                Django
+                                Contract management
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -593,7 +592,7 @@
                         
                         <li>
                             <span>
-                                Spring Boot
+                                Attention to detail
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -602,7 +601,7 @@
                         
                         <li>
                             <span>
-                                React.js
+                                Contract negotiation
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -611,7 +610,7 @@
                         
                         <li>
                             <span>
-                                AngularJS
+                                Project engineering
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -620,7 +619,7 @@
                         
                         <li>
                             <span>
-                                jQuery
+                                Structural engineering
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -629,30 +628,7 @@
                         
                         <li>
                             <span>
-                                Node.js
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                    </ul>
-                </div>
-                
-                
-                
-                
-                
-                 <h3>Databases</h3>
-                
-                
-                
-                <div class="skills-list">
-                    <ul>
-                        
-                        <li>
-                            <span>
-                                MySQL
+                                SketchUp
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -661,7 +637,7 @@
                         
                         <li>
                             <span>
-                                PostgreSQL
+                                Site execution
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -670,30 +646,7 @@
                         
                         <li>
                             <span>
-                                MongoDB
-                                <div class="skill-bar">
-                                    <div class="skill-level" style="width: 80%;"></div>
-                                </div>
-                            </span>
-                        </li>
-                        
-                    </ul>
-                </div>
-                
-                
-                
-                
-                
-                 <h3>Cloud Platforms</h3>
-                
-                
-                
-                <div class="skills-list">
-                    <ul>
-                        
-                        <li>
-                            <span>
-                                AWS (EC2, S3, Lambda, RDS)
+                                Construction management
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -702,7 +655,88 @@
                         
                         <li>
                             <span>
-                                Google Cloud Platform (Compute Engine, Cloud Storage)
+                                Project control
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Computer-Aided Design (CAD)
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Multitasking
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Building Information Modelling (BIM)
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Structural Design (intermediate level)
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Conducting lab tests and experiments
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Proficient in computer operations
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Leading, managing and organising fieldwork exercises
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Versatile and adaptable to vast work environments
+                                <div class="skill-bar">
+                                    <div class="skill-level" style="width: 80%;"></div>
+                                </div>
+                            </span>
+                        </li>
+                        
+                        <li>
+                            <span>
+                                Adept public relations.
                                 <div class="skill-bar">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
@@ -720,15 +754,15 @@
                 
                 
                     
-                     <h2> Projects </h2>  
+                     <h2> Extra Curricular Engagements </h2>  
                     
-                    <p>[&#x27;I developed a personal portfolio website to showcase my skills and projects, utilizing React.js, Node.js, and MongoDB, and deployed it on AWS. Also, I developed a mobile app to connect local businesses with customers, using Java, Android SDK, and Firebase.&#x27;]</p> 
+                    <p>From October 2018 to December 2021, I was an active member of Pivot Club at Kenyatta University, where I organized educational trips and participated in talks and seminars with critical mentors in the industry. From May 2014 to November 2015, I was a member of the aviation club at Pioneer School, where I built aeroplane models, applied engineering principles, and engaged in networking and team-building exercises.</p> 
                     
                 
                     
-                     <h2> Volunteer Experience </h2>  
+                     <h2> Leisure Activities </h2>  
                     
-                    <p>[&#x27;I contributed to open-source projects aimed at improving government services as a Code for America Volunteer from 2015 to Present.&#x27;]</p> 
+                    <p>My leisure activities include coding, reading, outdoor sports and activities, music, swimming, and chess.</p> 
                     
                 
                 

@@ -5,9 +5,10 @@
     <nav>
         <h1>Dossier</h1>
         <ul>
-            <li><a href="{% url 'resumes:create' %}">Create Resume</a></li>
-            <li><a href="{% url 'resumes:upload' %}">Upload PDF</a></li>
-            <li><a href="{% url 'resumes:personal_information' %}">Modify Resume</a></li>
+            <li><a href="{% url 'users:dashboard' %}">Home</a></li>
+            <li><a href="{% url 'resumes:create' %}">Create</a></li>
+            <li><a href="{% url 'resumes:upload' %}">Upload</a></li>
+            <li><a href="{% url 'resumes:my_resumes' %}">Resumes</a></li>
             <li>
                 <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}

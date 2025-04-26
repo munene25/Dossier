@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View, ListView, DeleteView
+from django.template.loader import render_to_string
 from django.forms.models import model_to_dict
-from django.views.generic import View
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-import json
+from django.contrib import messages
+from django.urls import reverse_lazy
 from .models import ResumeDataModel
 from . import utils
-from django.template.loader import render_to_string
+import json
 
 
 class UploadView(View):
@@ -22,6 +21,7 @@ class UploadView(View):
         form = utils.FormList.upload(request.POST, request.FILES)
 
         if form.is_valid():
+            raw_json = None
             try:
                 file_data = form.cleaned_data["pdf_file"]
                 raw_json = json.loads(utils.parse_resume(file_data))
@@ -141,5 +141,28 @@ def render_resume(request, *args ,**kwargs):
 def create(request):
     pass
 
-class ModifyView(View):
-    pass
+class ResumeListView(ListView):
+    model = ResumeDataModel
+    template_name = "resume_list.html"
+    context_object_name = "resumes"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user).order_by("-created_at")
+    
+
+def select_resume(request):
+    if request.method == "POST":
+        Form = getattr(utils.FormList, "nav_form")
+        form = Form(request.POST)
+        print(form)
+        if form.is_valid():
+            
+            request.session["resume_id"] = form.cleaned_data["resume_id"]
+            return redirect(f"resumes:{form.cleaned_data["next_url"]}")
+        else:
+            return redirect("users:dashboard")
+        
+class ResumeDeleteView(DeleteView):
+    model = ResumeDataModel
+    success_url = reverse_lazy('resume:my_resumes')

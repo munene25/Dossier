@@ -148,3 +148,7 @@ class DescriptionForm(forms.Form):
 
 class ItemForm(forms.Form):
     item = forms.CharField(required=False, label="")
+
+class NavForm(forms.Form):
+    resume_id = forms.CharField(required=True)
+    next_url = forms.CharField(required=True)

@@ -6,7 +6,10 @@ app_name = "resumes"
 urlpatterns = [
     path("create/", views.create, name="create"),
     path("upload/", views.UploadView.as_view(), name="upload"),
-    path("modify/", views.ModifyView.as_view(), name="modify"),
+    path("my-resumes/", views.ResumeListView.as_view(), name="my_resumes"),
+    path("delete/<int:pk>", views.ResumeDeleteView.as_view(), name="delete"),
+    path("select-resume/", views.select_resume, name="select_resume"),
+    # path("sections/", views.ResumeListView.as_view(), name="modify"),
     path(
         "modify/personal-information/",
         views.BasicFormView.as_view(category="personal_information"),
