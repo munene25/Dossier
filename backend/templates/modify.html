@@ -1,52 +1,182 @@
 {% extends 'dashboard.html' %} {% block content %}
-
-<form class="edit-forms" method="post" action="{% url 'resumes:'|add:category %}">
-	<!-- ----------------------------------- CSRF token ----------------------------------- -->
-	{% csrf_token %}
-
-
-	<div class="user-defined-field">
-		{{ user_field_form }} 
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" id="edit-user-form" class="svg-icon">
-		<path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-	  	</svg>
-	  </div>
-
-
-	<!-- ----------------------------------- Basic Form ----------------------------------- -->
-	{% if form %}
-	<div class="single-form">{{form}}</div>
-	{% endif %}
-
-
-	<!-- ----------------------------------- Management Form ----------------------------------- -->
-	{{ formset.management_form }}
-
-
-	<!-- ----------------------------------- Formset Container ----------------------------------- -->
-	{% if formset %}
-	<div id="formset-container">
-
-		{% for form in formset %}
-		<div class="single-form formset-form">
-
-			<button type="button" class="delete-button">Delete</button>
-
-			{{ form }}
-
-		</div>
-		{% endfor %}
-		<button type="button" class="add-button" id="add-form">New Form</button>
-	</div>
-	{% endif %}
+<section class="max-w-5xl mx-auto flex h-[calc(100vh-120px)] flex-row  border border-gray-300">
+	<aside class="absolute md:relative z-20 flex items-center h-full">
+		<div id="mobile-sections-menu" class="w-0 h-full relative md:w-60 md:block lg:w-80 md:z-auto md:relative border-r bg-gray-100 border-gray-300 overflow-y-auto py-4 text-sm transition-all duration-200">
+			<div class="px-4 pt-4 pb-2 border-b border-gray-200">
+				<h1 class="text-lg font-semibold text-gray-800 flex items-center">
+					<i class="fa-solid fa-list-check mr-2 text-purple-500"></i>
+					Resume Sections
+				</h1>
+				<p class="text-xs text-gray-500 mt-1">Complete all sections</p>
+			</div>
+			<ul class="space-y-1 p-4">
+				<!-- Personal Information -->
+				<li class="group">
+					<a href="{% url 'resumes:personal_information' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:border-gray-200 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-circle-user w-5 mr-3 text-purple-500 group-hover:text-purple-600"></i>
+						<span>Personal Information</span>
+					</a>
+				</li>
 		
-	<div class="link-container">
-		{% if back%} <a id="back-category" href="{%url 'resumes:'|add:back %}">Back</a> {% endif %}
-		<button type="submit" id="form-submit">Submit</button>
-		{% if next%} <a id="next-category" href="{%url 'resumes:'|add:next %}">Next</a> {% endif %}
-		{% if finish%} <a id="next-category" href="{%url 'resumes:'|add:finish %}">Finish</a> {% endif %}
-	</div>
-</form>
+				<!-- Overview -->
+				<li class="group">
+					<a href="{% url 'resumes:overview' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-regular fa-lightbulb w-5 mr-3 text-gray-500 group-hover:text-yellow-500"></i>
+						<span>Overview</span>
+					</a>
+				</li>
+		
+				<!-- Education -->
+				<li class="group">
+					<a href="{% url 'resumes:education' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-school w-5 mr-3 text-blue-500 group-hover:text-blue-600"></i>
+						<span>Education</span>
+					</a>
+				</li>
+		
+				<!-- Professional Experience -->
+				<li class="group">
+					<a href="{% url 'resumes:professional_experience' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-briefcase w-5 mr-3 text-green-500 group-hover:text-green-600"></i>
+						<span>Professional Experience</span>
+					</a>
+				</li>
+		
+				<!-- Skills -->
+				<li class="group">
+					<a href="{% url 'resumes:skills' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-code w-5 mr-3 text-orange-500 group-hover:text-orange-600"></i>
+						<span>Skills</span>
+					</a>
+				</li>
+		
+				<!-- Referees -->
+				<li class="group">
+					<a href="{% url 'resumes:referees' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-people-group w-5 mr-3 text-red-500 group-hover:text-red-600"></i>
+						<span>Referees</span>
+					</a>
+				</li>
+		
+				<!-- Certificates -->
+				<li class="group">
+					<a href="{% url 'resumes:certificates' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-print w-5 mr-3 text-indigo-500 group-hover:text-indigo-600"></i>
+						<span>Certificates</span>
+					</a>
+				</li>
+		
+				<!-- Languages -->
+				<li class="group">
+					<a href="{% url 'resumes:languages' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200">
+						<i class="fa-solid fa-language w-5 mr-3 text-teal-500 group-hover:text-teal-600"></i>
+						<span>Languages</span>
+					</a>
+				</li>
+				<li class="group pt-8 ">
+					<!-- Preview -->
+				<li class="group mt-10 pt-4 border-t border-gray-200">
+					<a href="{% url 'resumes:preview' resume_id=pk %}"
+						class="flex items-center px-4 py-3 rounded-lg bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-all duration-200">
+						<i class="fa-regular fa-clipboard w-5 mr-3"></i>
+						<span>Preview Resume</span>
+						<i class="fa-solid fa-arrow-up-right-from-square ml-auto text-sm"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div id="mobile-sections-button" class="w-12 rounded-r-2xl shadowr-md bg-purple-300/50 backdrop-blur-md h-full relative z-10 md:hidden flex items-center justify-center">
+			<button class="flex items-center gap-2 text-xs" type="button"  aria-expanded="false">
+				<p class="vertical-rl">Sections</p>
+				<i class="fa-solid fa-caret-right text-purple-900 text-3xl"></i>
+				<i class="hidden fa-solid fa-caret-left text-purple-900 text-3xl"></i>
+			</button>
+		</div>
+	</aside>
+	<section class="container ml-10 md:ml-auto overflow-y-auto pb-4">
+		<div class="sticky top-0 z-10 bg-purple-100 border-b border-gray-200 px-6 py-10 mb4 ">
+			<div class="flex justify-around items-center">
+				<h2 class="text-xl md:text-2xl font-semibold text-gray-800 flex items-center">
+					{% if category == "professional_experience" %} Professional Experience Section
+					{% elif category == "personal_information" %} Personal Information Section
+					{% else %} {{ category|title}} Section
+					{% endif %}
+				</h2>
+				<div
+					class="flex w-1/2 text-center items-center text-xs text-gray-600 bg-yellow-50 px-3 py-1.5 rounded-lg">
+					<i class="fa-solid fa-circle-info mr-2 text-yellow-500"></i>
+					<span>Complete and submit to save your data</span>
+				</div>
+			</div>
+		</div>
 
 
+		<form class="edit-forms" method="post" action="{% url 'resumes:'|add:category resume_id=pk %}">
+			<!-- ----------------------------------- CSRF token ----------------------------------- -->
+			{% csrf_token %}
+			<div class="user-defined-field border-b border-gray-200 py-2">
+				{{ user_field_form }}
+				<button type="button" id="edit-user-form"
+					class="text-purple-500 hover:text-purple-900 px-3 py-1 rounded-md text-sm font-medium transition-colors">
+					<i class="fa-solid fa-pen-to-square mr-2 text-purple-500"></i>Customize section Title
+				</button>
+			</div>
+
+
+			<!-- ----------------------------------- Basic Form ----------------------------------- -->
+
+			{% if form %}
+			<div class="mx-4 single-form border border-gray-200 shadow-md rounded-lg formset-form">{{form}}</div>
+			{% endif %}
+
+
+			<!-- ----------------------------------- Management Form ----------------------------------- -->
+			{{ formset.management_form }}
+
+
+			<!-- ----------------------------------- Formset Container ----------------------------------- -->
+			{% if formset %}
+			<div id="formset-container">
+
+				{% for form in formset %}
+				<div class="mx-4 single-form border border-gray-200 shadow-md rounded-lg formset-form">
+
+					<button type="button"
+						class="delete-button text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md text-sm font-medium transition-colors">
+						<i class="fas fa-trash-alt mr-1"></i> Delete
+					</button>
+
+					{{ form }}
+
+				</div>
+				{% endfor %}
+				<button type="button" id="add-item"
+					class="font-medium text-purple-600 hover:text-purple-900 focus:outline-none">
+					<i class="fas fa-add mr-1"></i> Add Section
+				</button>
+				<div class="relative mt-2 rounded-xl px-5 font-small hidden p-2 bg-red-100 text-red-600">
+					<i class="fa-solid fa-circle-exclamation mr-1"></i>
+					<span class="mr-10">Please fill previous form first</span>
+					<button type="button" class="absolute right-0 bottom-0 text-base font-bold"
+						onclick="this.parentElement.classList.add('hidden')">&times;</button>
+				</div>
+			</div>
+			{% endif %}
+
+
+			<button type="submit"
+				class="btn-primary w-8/12 mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+				Submit
+			</button>
+		</form>
+	</section>
+</section>
 {% endblock %}

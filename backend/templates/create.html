@@ -2,8 +2,8 @@
 {% block content %}
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 relative w-full my-auto">
     <div class="text-center mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Upload Resume</h2>
-        <p class="text-gray-600 mt-2">Upload your existing resume to get started</p>
+        <h2 class="text-3xl font-bold text-gray-800">Create Your Resume</h2>
+        <p class="text-gray-600 mt-2">Enter the title of your new resume to get started</p>
     </div>
     
     {% if form.errors %}
@@ -22,18 +22,8 @@
     </div>
     {% endif %}
     
-    <form method="post" enctype="multipart/form-data" class="space-y-6">
+    <form method="post" class="space-y-6">
         {% csrf_token %}
-        
-        <div>
-            <label for="id_file" class="block text-sm font-medium text-gray-700 mb-1">Resume File</label>
-            <div class="relative">
-                <input type="file" id="id_file" name="pdf_file" required
-                       class="form-input block w-full rounded-md py-2 border-gray-300 focus:border-purple-500 focus:ring-purple-500">
-            </div>
-            <p class="mt-1 text-sm text-gray-500">PDF, DOC, or DOCX files only</p>
-        </div>
-        
         <div>
             <label for="id_title" class="block text-sm font-medium text-gray-700 mb-1">Resume Title</label>
             <div class="relative ">
@@ -48,16 +38,16 @@
         
         <div>
             <button type="submit" class="btn-primary w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                Upload Resume
+                Create Resume
             </button>
         </div>
     </form>
     
     <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
-            Prefer to start from scratch? 
-            <a href="{% url 'resumes:create' %}" class="font-medium text-purple-600 hover:text-purple-500">
-                Create new resume
+            Prefer to upload an already existing resume? 
+            <a href="{% url 'resumes:upload' %}" class="font-medium text-purple-600 hover:text-purple-500">
+                Upload Resume
             </a>
         </p>
     </div>

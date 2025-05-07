@@ -21,9 +21,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users import views
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("resumes/", include("resumes.urls", namespace="resumes")),
-    path("", include("users.urls", namespace="users")),
+    # path("", include("users.urls", namespace="users")),
+    path('accounts/', include('allauth.urls')),
 ]

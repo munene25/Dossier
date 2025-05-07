@@ -2,7 +2,7 @@ from django import forms
 
 class ResumeUploadForm(forms.Form):
     pdf_file = forms.FileField(label='Upload file (PDF ONLY)' )
-
+    title = forms.CharField(label="", required=True)
     def clean_pdf_file(self):
         pdf_file = self.cleaned_data["pdf_file"]  # pdf_file is how we stored it
         if pdf_file.content_type != "application/pdf":
@@ -15,12 +15,14 @@ class ResumeUploadForm(forms.Form):
 
         return pdf_file
 
+class CreateResumeForm(forms.Form):
+    title = forms.CharField(label="", required=True)
 
 class UserDefinedFieldForm(forms.Form):
     user_defined_field = forms.CharField(
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Category"}),
-        required=False,
+        required=True,
     )
 
 
@@ -62,7 +64,7 @@ class EducationForm(forms.Form):
     location = forms.CharField(required=False)
     graduation_date = forms.CharField(required=False)
     description = forms.CharField(
-        label="",
+        label="Competencies",
         required=False,
         widget=forms.Textarea(
             attrs={"rows": 10, "cols": 60, "placeholder": "Skills Acquired"}
@@ -79,8 +81,10 @@ class EducationForm(forms.Form):
             self.initial["description"] = "\n".join(list_data)
 
     def clean_description(self):
-        submited_list_data = self.cleaned_data.get("description", "")
-        return submited_list_data.splitlines()
+        submitted_list_data = self.cleaned_data.get("description", "")
+        data = submitted_list_data.splitlines()
+        cleaned_data = [line for line in data if line.strip()]
+        return cleaned_data
 
 
 class ProfessionalExperienceForm(forms.Form):
@@ -91,7 +95,7 @@ class ProfessionalExperienceForm(forms.Form):
     start_date = forms.CharField(required=False)
     end_date = forms.CharField(required=False)
     responsibilities = forms.CharField(
-        label="",
+        label="Responsibilities",
         required=False,
         widget=forms.Textarea(
             attrs={"rows": 10, "cols": 60, "placeholder": "Responsibilities"}
@@ -107,9 +111,11 @@ class ProfessionalExperienceForm(forms.Form):
         if isinstance(list_data, list):
             self.initial["responsibilities"] = "\n".join(list_data)
 
-    def clean_responsibilities(self):
-        submited_list_data = self.cleaned_data.get("responsibilities", "")
-        return submited_list_data.splitlines()
+    def clean_description(self):
+        submitted_list_data = self.cleaned_data.get("description", "")
+        data = submitted_list_data.splitlines()
+        cleaned_data = [line for line in data if line.strip()]
+        return cleaned_data
 
 
 class RefereesForm(forms.Form):
@@ -125,7 +131,7 @@ class DescriptionForm(forms.Form):
 
     category_name = forms.CharField(label="Section", required=False)
     description = forms.CharField(
-        label="",
+        label="Description",
         required=False,
         widget=forms.Textarea(
             attrs={"rows": 10, "cols": 60, "placeholder": "Extra data"}
@@ -142,8 +148,10 @@ class DescriptionForm(forms.Form):
             self.initial["description"] = "\n".join(list_data)
 
     def clean_description(self):
-        submited_list_data = self.cleaned_data.get("description", "")
-        return submited_list_data.splitlines()
+        submitted_list_data = self.cleaned_data.get("description", "")
+        data = submitted_list_data.splitlines()
+        cleaned_data = [line for line in data if line.strip()]
+        return cleaned_data
 
 
 class ItemForm(forms.Form):

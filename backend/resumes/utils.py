@@ -6,7 +6,7 @@ from typing import Optional, List, Dict
 from django.conf import settings
 from .models import ResumeDataModel
 from . import forms
-from weasyprint import HTML
+
 from django.forms import formset_factory
 
 
@@ -114,8 +114,7 @@ class FormList:
     nav_form = forms.NavForm
 
 sys_prmpt = """ 
-    You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.
-
+You are a resume parsing software. Extract and structure the data into JSON format, categorizing it under relevant sections.
 ### **Rules:**  
 - **Extract only meaningful content**: Ignore section dividers, bullet points, repeated headers, and unnecessary formatting while preserving logical structure.  
 - **Map sections intelligently**: If a resume uses "Work History" instead of "ProfessionalExperience," map it accordingly in the UserDefinedFields. If a section is unclear, place it under "Extras."  
@@ -124,7 +123,6 @@ sys_prmpt = """
 - **Extract each language separately**: Ensure individual entries (e.g., "English," "French").  
 - **Maintain consistency**: Include all predefined sections, even if empty.  
 - **Standardize dates**: Format all dates as "Month, YYYY." If no end date is provided, use "Present."
-
 
 """
 
@@ -145,10 +143,8 @@ def generate(raw_extracted_text):
     GOOGLE_API_KEY = settings.GOOGLE_API_KEY
     client = genai.Client(api_key=GOOGLE_API_KEY)
 
-    model = "gemini-2.0-flash"
-
     response = client.models.generate_content(
-        model=model,
+        model = "gemini-2.0-flash",
         contents=f"Resume is as Follows: \n {raw_extracted_text} \n Parse this resume for me",
         config={
             "response_mime_type": "application/json",
@@ -158,9 +154,10 @@ def generate(raw_extracted_text):
     )
     return response.text
 
-def create_resume_object(user, raw_json):
+def create_resume_object(user, title, raw_json):
     resume = ResumeDataModel.objects.create(
         user = user,
+        title = title,
         user_defined_fields=raw_json.get("user_defined_fields", {}),
         personal_information=raw_json.get("personal_information", {}),
         overview=raw_json.get("overview", {}),
@@ -172,23 +169,22 @@ def create_resume_object(user, raw_json):
         certificates=raw_json.get("certificates", []),
         languages=raw_json.get("languages", []),
     )
-    for key, value in resume.user_defined_fields.items():
-        print(f"{key} : {value}")
-        if value is None:
-            resume.user_defined_fields[key] = key.replace("_", " ").title()
-    resume.save()
+    if resume.user_defined_fields:
+        for key, value in resume.user_defined_fields.items():
+            if value is None:
+                resume.user_defined_fields[key] = key.replace("_", " ").title()
+        resume.save()
+    else:
+        resume.user_defined_fields = {"personal_information": "Personal Information", "overview": "Overview", "education": "Education", "professional_experience": "Professional Experience", "skills": "Skills", "referees": "Referees", "certificates": "Certificates", "languages": "Languages"}
+        resume.save()
     return resume
 
 def get_resume_data(resume_object, category):
     category_data = getattr(resume_object, category)
-    if resume_object.user_defined_fields:
-        if category != "extras":
-            field_name = resume_object.user_defined_fields[category]
-        else:
-            field_name = 'Extras'
+    if category != "extras":
+        field_name = resume_object.user_defined_fields[category]
     else:
-        field_name = ''
-        category_data = {}
+        field_name = 'Extras'
     return {"field_name": field_name, "category_data": category_data}
 
 def update_resume(category: str, pk: int, data: any, user_defined_data: dict):
@@ -223,8 +219,7 @@ def clean_formset(formset):
     else:
         return formset.errors
         
-def print_pdf():
-    HTML('input.html').write_pdf('output.pdf')
+    
 
 if (__name__) == "__main__":
     pass

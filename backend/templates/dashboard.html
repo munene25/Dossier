@@ -1,28 +1,82 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<header>
-    <nav>
-        <h1>Dossier</h1>
-        <ul>
-            <li><a href="{% url 'users:dashboard' %}">Home</a></li>
-            <li><a href="{% url 'resumes:create' %}">Create</a></li>
-            <li><a href="{% url 'resumes:upload' %}">Upload</a></li>
-            <li><a href="{% url 'resumes:my_resumes' %}">Resumes</a></li>
-            <li>
-                <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-file-alt text-2xl text-purple-700"></i>
+                <h1 class="text-2xl font-bold text-purple-700">Dossier</h1>
+            </div>
+            <nav class="hidden md:block">
+                {% if user.is_authenticated %}
+                <ul class="flex space-x-6">
+                    <li><a href="{% url 'users:dashboard' %}" class="nav-link text-gray-700 hover:text-purple-700 font-medium">Home</a></li>
+                    <li><a href="{% url 'resumes:create' %}" class="nav-link text-gray-700 hover:text-purple-700 font-medium">Create</a></li>
+                    <li><a href="{% url 'resumes:upload' %}" class="nav-link text-gray-700 hover:text-purple-700 font-medium">Upload</a></li>
+                    <li><a href="{% url 'resumes:my_resumes' %}" class="nav-link text-gray-700 hover:text-purple-700 font-medium">Resumes</a></li>
+                </ul>
+                {% endif %}
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                <form action="{% url 'users:logout' %}" method="post" class="hidden md:block inline">
                     {% csrf_token %}
-                    <button type="submit">Logout</button>
+                    <button type="submit" class="text-red-600 hover:text-red-700 font-medium flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </button>
                 </form>
-            </li>
-        </ul>
-    </nav>
-</header>
+                <button type="button" class="md:hidden text-gray-700" id="mobile-menu-button">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                {% else %}
+                <form action="{% url 'users:login' %}" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-purple-600 hover:text-purple-700 font-medium flex items-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Login
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden rounded-b-lg shadow-sm absolute block right-0 w-full bg-purple-100/30 backdrop-blur-md border-b border-gray-500 p-4 z-50">
+        {% if user.is_authenticated %}
+            <ul class="flex flex-col mb-4 space-y-8 items-center flex-grow h-full">
+                <li><a href="{% url 'users:dashboard' %}" class="block py-2 text-purple-700 hover:text-purple-700 font-medium"><i class="fa-solid fa-house mr-4"></i> Home</a></li>
+                <li><a href="{% url 'resumes:create' %}" class="block py-2 text-purple-700 hover:text-purple-700 font-medium"><i class="fa-solid fa-pen mr-4"></i>Create</a></li>
+                <li><a href="{% url 'resumes:upload' %}" class="block py-2 text-purple-700 hover:text-purple-700 font-medium"><i class="fa-solid fa-upload mr-4"></i>Upload</a></li>
+                <li><a href="{% url 'resumes:my_resumes' %}" class="block py-2 text-purple-700 hover:text-purple-700 font-medium"><i class="fa-solid fa-server mr-4"></i>Resumes</a></li>
+                <li class="block py-2 text-gray-700 hover:text-purple-700 font-medium">
+                    <form action="{% url 'users:logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-600 hover:text-red-700 font-medium flex items-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        {% endif %}
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="relative flex-grow container flex flex-col mx-auto px-2 relative">
+        {% block content %}
+        {% endblock %}
+    </main>
 
-{% block content %}
-{% endblock %}
-
-<footer>
-    <p>&copy; {{ now|date:"Y" }} Dossier. All rights reserved.</p>
-</footer>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-2">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>&copy; {{ now|date:"Y" }} Dossier. All rights reserved.</p>
+            <div class="mt-2 flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-purple-600">Terms</a>
+                <a href="#" class="text-gray-400 hover:text-purple-600">Privacy</a>
+                <a href="#" class="text-gray-400 hover:text-purple-600">Contact</a>
+            </div>
+        </div>
+    </footer>
 {% endblock %}

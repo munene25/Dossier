@@ -1,19 +1,36 @@
 {% extends 'dashboard.html' %}
 {% block content %}
-<section class="hero">
-    <h2>Welcome <strong>{{ user.username }}</strong>!</h2>
-    <p>
-        Tired of messy PDFs and clunky resume editors? <br>
-        Our platform simplifies the entire resume process:
-    </p>
-    <ul>
-        <li>📄 Upload your existing resume and we'll extract your data cleanly.</li>
-        <li>🛠️ Edit it with ease using our intuitive editor.</li>
-        <li>🎨 Download a beautifully designed, recruiter-friendly PDF.</li>
-    </ul>
-    <div class="cta-buttons">
-        <a href="{% url 'resumes:create' %}">Start from Scratch</a>
-        <a href="{% url 'resumes:upload' %}">Upload Existing PDF</a>
+<section class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">Welcome <span class="text-purple-700">{{ user.username }}</span>!</h2>
+        <p class="text-xl text-gray-600 mb-8">
+            Tired of messy PDFs and clunky resume editors? <br>
+            Our platform simplifies the entire resume process:
+        </p>
+        
+        <ul class="space-y-4 text-left max-w-xl mx-auto mb-12">
+            <li class="flex items-start">
+                <span class="text-purple-500 mr-3"><i class="fas fa-file-alt"></i></span>
+                <span class="text-gray-700">Upload your existing resume and we'll extract your data cleanly.</span>
+            </li>
+            <li class="flex items-start">
+                <span class="text-purple-500 mr-3"><i class="fas fa-edit"></i></span>
+                <span class="text-gray-700">Edit it with ease using our intuitive editor.</span>
+            </li>
+            <li class="flex items-start">
+                <span class="text-purple-500 mr-3"><i class="fas fa-file-download"></i></span>
+                <span class="text-gray-700">Download a beautifully designed, recruiter-friendly PDF.</span>
+            </li>
+        </ul>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="{% url 'resumes:create' %}" class="btn-primary inline-flex justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Start from Scratch
+            </a>
+            <a href="{% url 'resumes:upload' %}" class="btn-secondary inline-flex justify-center py-3 px-6 border rounded-md shadow-sm text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Upload Existing PDF
+            </a>
+        </div>
     </div>
 </section>
 {% endblock %}

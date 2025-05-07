@@ -33,6 +33,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'allauth', #allauth
+    'allauth.account', #allauth
+    'allauth.socialaccount', #allauth social accounts
+    'allauth.socialaccount.providers.google', # allauth google acc
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -51,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware", #allauth
 ]
 
 ROOT_URLCONF = "dossier.urls"
@@ -71,6 +76,14 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+#allauth authentication backends
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = "dossier.wsgi.application"
@@ -139,8 +152,39 @@ load_dotenv()  # in development
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE KEY NOT FOUND")
+    raise ValueError("GOOGLE API KEY NOT FOUND")
 
-LOGIN_URL = "users:login"
-LOGOUT_REDIRECT_URL = "users:login"
-LOGIN_REDIRECT_URL = "users:dashboard"
+
+
+# Allauth-specific settings
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'  # Same as LOGOUT_REDIRECT_URL
+
+
+# Email settings (required for verification)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Production
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Dev
+
+
+# Allauth settings
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False  # No username!
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Auth via email
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Force email confirm (optional)
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True  # Auto-login after verification
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # Simpler signup
+ACCOUNT_SESSION_REMEMBER = True  # "Remember me" functionality
+SITE_ID = 1  # Required for allauth
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+
+
+# Django's default auth settings (compatible with allauth)
+LOGIN_URL = 'account_login'  # allauth's login URL (instead of 'users:login')
+LOGIN_REDIRECT_URL = 'users:dashboard'  # After successful login
+LOGOUT_REDIRECT_URL = 'account_login'  # After logout (redirect to login page)

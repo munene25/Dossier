@@ -1,0 +1,89 @@
+{% extends 'dashboard.html' %}
+{% load i18n %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 relative w-full my-auto">
+    <div class="text-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Welcome</h2>
+        <p class="text-gray-600 mt-2">Sign in to your Dossier account</p>
+    </div>
+    
+    {% if form.errors %}
+    <div class="mb-4 p-4 bg-red-50 rounded-lg border border-red-200">
+        <div class="flex items-center text-red-600">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span>Please correct the errors below</span>
+        </div>
+        <ul class="mt-2 text-sm text-red-600">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="mb-6">
+            <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <div class="relative">
+                <div class="absolute mb-2 inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-user text-gray-400"></i>
+                </div>
+                <input type="text" id="id_email" name="email" required
+                       class="form-input pl-10 block w-full rounded-md py-2 border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                       placeholder="Enter your E-mail address">
+                <!-- Error message container (hidden by default) -->
+                <div id="username-error" class="absolute left-0 -bottom-5 mt-1 text-sm text-red-600 h-5"></div>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <label for="id_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <div class="relative">
+                <div class="absolute mb-2 inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-lock text-gray-400"></i>
+                </div>
+                <input type="password" id="id_password" name="password" required
+                       class="form-input pl-10 block w-full rounded-md py-2 border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                       placeholder="Enter your password">
+                <!-- Error message container (hidden by default) -->
+                <div id="password-error" class="absolute left-0 -bottom-5 mt-1 text-sm text-red-600 h-5"></div>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <input id="remember-me" name="remember-me" type="checkbox" 
+                       class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                    Remember me
+                </label>
+            </div>
+            
+            <div class="text-sm">
+                <a href="#" class="font-medium text-purple-600 hover:text-purple-500">
+                    Forgot password?
+                </a>
+            </div>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn-primary w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Sign in
+            </button>
+        </div>
+    </form>
+    
+    <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+            Don't have an account? 
+            <a href="{% url 'users:signup' %}" class="font-medium text-purple-600 hover:text-purple-500">
+                Create one here
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

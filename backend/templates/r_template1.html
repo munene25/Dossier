@@ -6,11 +6,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{data.personal_information.first_name}} {{data.personal_information.last_name}} - {{data.personal_information.career}}</title>
     <style>
         @page {
             size: A4;
-            margin: 0.5cm;
+            margin: 1cm;
         }
         *{
             box-sizing: border-box;
@@ -21,16 +20,14 @@
             background-color: white;
             color: #555
         }
-        .container {
-            background-color: white;
-        }
+
         .right-section,
         .left-section {
             padding: 30px;
         }
 
         .left-section {
-            border-right: 2px solid #333;
+            border-right: 2px solid #00000050;
             width:70%;
         }
         .profile-block {
@@ -38,9 +35,9 @@
         }
         .main-section{
             width: 100%;
-            min-height: 10rem;
-            height: 15rem;
-            max-height: 15rem;
+            min-height: 10em;
+            height: 15em;
+            max-height: 15em;
             display: flex;
             flex-direction: row-reverse;
             justify-content: flex-end;
@@ -49,7 +46,7 @@
         }
         .orange{
             display: inline;
-            width: 6rem;
+            width: 6em;
             height: 100%;
             background-color: #ff9900;
             float: left;
@@ -57,9 +54,9 @@
         
         .profile-header {
             display: inline-block;
-            width: 10rem;
+            width: 20em;
             height: fit-content;
-            margin-left: 2.5rem;
+            margin-left: 2.5em;
         }
 
         .profile-header h1 {
@@ -67,7 +64,7 @@
             margin: 0;
             color: #333;
             text-transform: uppercase;
-            font-size: 3rem;
+            font-size: 3em;
             letter-spacing: 0.8px;
         }
         .profile-header .first-name{
@@ -94,7 +91,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 1rem;
+            gap: 1em;
         }
         .contact-section a{
             text-decoration: none;
@@ -132,7 +129,7 @@
         .work-experience-section h2 {
             text-transform: uppercase;
             border-bottom: 2px solid #555;
-            padding-bottom: 8px;
+            padding-bottom: 4px;
             margin-bottom: 15px;
             font-size: 1.2em;
             font-weight: 500;
@@ -173,24 +170,32 @@
             font-size: 0.85em;
         }
         
-        ul{
-            font-size: 0.9em;
-            list-style-type: none;
-            padding-left: 1rem;
+        .unorderd-list{
+            padding-left: 1.5em;
             width: 100%;
-            text-align: start;
         }
-        li{
-            margin: 8px 0;
+        .list-item{
+            font-size: 0.9em;
+            margin: 1em 0;
+            list-style-type: none;
+            text-align: start;
         }
 
         .skills-section {
             background-color: #f0f0f0;
-
             padding: 30px;
             border-radius: 0 0 8px 0;
             
         }
+        .skills-section h3 {
+            text-transform: uppercase;
+            margin-top: 1em;
+            padding-bottom: 4px;
+            font-size: 0.95em;
+            font-weight: 800;
+            color: #333;
+        }
+
         .skills-section h2 {
             text-transform: uppercase;
             border-bottom: 2px solid #555;
@@ -238,8 +243,8 @@
         .extras-section h2 {
             text-transform: uppercase;
             border-bottom: #222 2px solid;
-            margin-top: 2rem ;
-            padding-bottom: 8px;
+            margin-top: 2em ;
+            padding-bottom: 4px;
             margin-bottom: 15px;
             font-size: 1.2em;
             font-weight: 500;
@@ -318,7 +323,7 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="preview-container">
         <div class="right-section">
             <div class="education-section">
                 <h2>{{data.user_defined_fields.education}}</h2>
@@ -326,9 +331,9 @@
                     <div class="education-item">
                         <h3>{{edu.degree}}</h3>
                         <p>{{edu.institution}} {% if edu.location %} - {{edu.location}} {% endif %} {% if edu.graduation_date %} - <i class="date">{{edu.graduation_date}}</i> {% endif %} </p>
-                        <ul>
+                        <ul class="unordered-list">
                             {% for item in edu.description %}
-                                <li>{{item}}</li>
+                                <li class="list-item">{{item}}</li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -338,10 +343,10 @@
             {% if data.languages %}
             <div class="languages-section">
                 <h2>{{data.user_defined_fields.languages}}</h2>
-                <ul>
+                <ul class="unordered-list">
                     {% for item in data.languages %}
                     {% for key, value in item.items %}
-                        <li>{{value}}</li>
+                        <li class="list-item">{{value}}</li>
                     {% endfor %}
                     {% endfor %}
                 </ul>
@@ -351,10 +356,10 @@
             {% if data.certificates %}
             <div class="certificates-section">
                 <h2>{{data.user_defined_fields.certificates}}</h2>
-                <ul>
+                <ul class="unordered-list">
                     {% for item in data.certificates %}
                     {% for key, value in item.items %}
-                        <li>{{value}}</li>
+                        <li class="list-item">{{value}}</li>
                     {% endfor %}
                     {% endfor %}
                 </ul>
@@ -382,7 +387,7 @@
                     <div class="profile-header">
                         <h1 class="first-name">{{data.personal_information.first_name}}</h1>
                         <h1 class="last-name">{{data.personal_information.last_name}}</h1>
-                        <p>{{data.personal_information.career}}</p>
+                        {% if data.personal_information.career %} <p>{{data.personal_information.career}}</p> {% endif %}
                     </div>
                     <div class="orange"></div>
                 </div>
@@ -442,9 +447,9 @@
                     <div>
                         <p class="company"> <strong>{{item.company}}</strong> {% if item.department %} - {{item.department}} {% endif %} </p>
                         {% if item.location %} <p class="company"><i>{{item.location}}</i> </p>{% endif %}
-                        <ul>
+                        <ul class="unordered-list">
                             {% for responsibility in item.responsibilities %}
-                                <li>{{responsibility}}</li>
+                                <li class="list-item">{{responsibility}}</li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -459,12 +464,12 @@
                 {% for key, value in skill.items %}
                 {% if key == "description" %}
                 <div class="skills-list">
-                    <ul>
+                    <ul class="unordered-list">
                         {% for val in value %}
-                        <li>
+                        <li class="list-item">
                             <span>
-                                {{val}}
-                                <div class="skill-bar">
+                                <div style="width: 35%;">{{val}}</div>
+                                <div class="skill-bar" style="width: 60%;">
                                     <div class="skill-level" style="width: 80%;"></div>
                                 </div>
                             </span>
