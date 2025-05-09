@@ -38,7 +38,7 @@ if ENVIRONMENT == "development":
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['dossier-jq2q.onrender.com', 'localhost', '127.0.0.1']
 
 INTERNAL_IPS =(
     '127.0.0.1',
@@ -144,7 +144,7 @@ LANGUAGE_CODE = "en-us"
 
 if ENVIRONMENT == 'development':
     TIME_ZONE = "Africa/Nairobi"
-    
+
 else:
     TIME_ZONE = "Africa/Nairobi"
 
