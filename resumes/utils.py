@@ -97,7 +97,7 @@ class Navigation:
     referees = {"back": "skills", "next": "extras"}
     extras = {"back": "referees", "next": "certificates"}
     certificates = {"back": "extras", "next": "languages"}
-    languages = {"back": "certificates", "finish": "render_resume"}
+    languages = {"back": "certificates", "finish": "preview"}
 
 class FormList:
     user_defined_field = forms.UserDefinedFieldForm
