@@ -6,6 +6,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossier</title>
+    <link rel="icon" href="{% static 'icons/favicon.png' %}" type="image/x-icon">
+    
+    <!-- Optional: If you want to support multiple sizes -->
+    <link rel="icon" href="{% static 'icons/favicon.png' %}" sizes="16x16" type="image/x-icon">
+    <link rel="icon" href="{% static 'icons/favicon.png' %}" sizes="32x32" type="image/x-icon">
+    
+    <!-- Optional: If you have a PNG or SVG version -->
+    <link rel="icon" href="{% static 'icons/favicon.png' %}" type="image/png">
+    
+    <!-- Optional for Apple devices -->
+    <link rel="apple-touch-icon" href="{% static 'icons/favicon.png' %}">
+    
+    <!-- Optional for Android devices -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" href="{% static 'icons/favicon.png' %}" sizes="192x192">
+    
+    <!-- Other head elements -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% if debug %} {% static 'css/tailwind.css' %} {% else %} {% static 'css/tailwind-min.css' %} {% endif %} ">
