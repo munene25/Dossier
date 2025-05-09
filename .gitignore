@@ -11,14 +11,7 @@ __pycache__/
 venv/
 .env/
 
-#ignore media dir and db
-backend/media/
-backend/db.sqlite3
-
-#ignore ollama
-ollama_app
 
 .env
-%USERP~1/
-output.pdf
 node/
+db.sqlite3
