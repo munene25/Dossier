@@ -29,7 +29,7 @@ def custom_404(request, exception=None):
 handler404 = custom_404
 
 urlpatterns = [
-    path("admin_manage/", admin.site.urls),
+    path("admin-manage/", admin.site.urls),
     path("resumes/", include("resumes.urls", namespace="resumes")),
     path("", include("users.urls")),
 ]
