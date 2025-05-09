@@ -16,7 +16,7 @@ from allauth.account.views import (
 from allauth.account.adapter import DefaultAccountAdapter
 from .forms import CustomLoginForm
 
-class DashboardView(LoginRequiredMixin, generic.TemplateView):
+class DashboardView(generic.TemplateView):
     template_name = 'welcome.html'
 
 class CustomLoginView(LoginView):
