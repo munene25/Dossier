@@ -6,9 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossier</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% if debug %} {% static 'css/tailwind.css' %} {% else %} {% static 'css/tailwind-min.css' %} {% endif %} ">
+    <link rel="stylesheet" href="{% static 'css/styles-min.css' %}">
     {% block style %} {% endblock %}
 </head>
 <body class="min-h-screen flex flex-col">

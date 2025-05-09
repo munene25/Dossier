@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, ListView, DeleteView
+from django.views.generic import View, ListView
 from django.template.loader import render_to_string
 from django.forms.models import model_to_dict
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponse
 from weasyprint import HTML
@@ -11,7 +12,7 @@ from .forms import CreateResumeForm
 import json
 
 
-class UploadView(View):
+class UploadView(LoginRequiredMixin, View):
     def get(self, request):
         return render(
             request,
@@ -48,7 +49,7 @@ class UploadView(View):
 
         return render(request, template_name="upload.html", context={"form": utils.FormList.upload})
 
-class CreateView(View):
+class CreateView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "create.html")
     
@@ -64,7 +65,7 @@ class CreateView(View):
             return redirect("resumes:create",  new_resume.id)
     
 
-class BasicFormView(View):
+class BasicFormView(LoginRequiredMixin, View):
     """Generate forms for Personal Information and Overview"""
 
     template_name = "modify.html"
@@ -104,7 +105,7 @@ class BasicFormView(View):
         return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk)
 
 
-class FormsetView(View):
+class FormsetView(LoginRequiredMixin, View):
     """Generate forms for Personal Information and Overview"""
 
     template_name = "modify.html"
@@ -151,7 +152,7 @@ class FormsetView(View):
         return redirect(f"resumes:{getattr(utils.Navigation(), self.category)['next']}", pk)
 
 
-class ResumeListView(ListView):
+class ResumeListView(LoginRequiredMixin, ListView):
     model = ResumeDataModel
     template_name = "resume_list.html"
     context_object_name = "resumes"
@@ -162,14 +163,14 @@ class ResumeListView(ListView):
         return qs.filter(user=self.request.user).order_by("-created_at")
     
 
-class ResumePreviewView(View):
+class ResumePreviewView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         resume_id = kwargs.get("resume_id")
         resume = get_object_or_404(ResumeDataModel, pk=resume_id)
         resume_dict = model_to_dict(resume)
         return render(request, 'preview.html', {"data": resume_dict, "resume_id": resume_id})
 
-class DownloadView(View):
+class DownloadView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         resume_id = kwargs.get("resume_id")
         resume = get_object_or_404(ResumeDataModel, pk=resume_id)
@@ -200,7 +201,7 @@ class DownloadView(View):
         return response
 
         
-class ResumeDeleteView(View):
+class ResumeDeleteView(LoginRequiredMixin, View):
     def post(self, request, **kwargs):
         pk = kwargs.get("resume_id")
         try:

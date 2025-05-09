@@ -1,26 +1,63 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from resumes.models import ResumeDataModel
-
-class SignUpView(generic.CreateView):
-    form_class    = UserCreationForm
-    template_name = 'signup.html'
-    success_url   = reverse_lazy('users:login')
-
-    def form_valid(self, form):
-        # First save the new user
-        response = super().form_valid(form)
-        # Then add your message
-        messages.success(self.request, "Account created succesfully — please log in.")
-        return response
-
+from allauth.account.views import (
+    LoginView, 
+    SignupView, 
+    LogoutView, 
+    PasswordResetView, 
+    PasswordResetDoneView, 
+    PasswordChangeView,
+    EmailView,
+    PasswordResetFromKeyView,
+    ConfirmEmailView,
+)
+from allauth.account.adapter import DefaultAccountAdapter
+from .forms import CustomLoginForm
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
     template_name = 'welcome.html'
+
+class CustomLoginView(LoginView):
+    template_name = 'account/login.html'
+    form_class = CustomLoginForm
+
+    def form_valid(self, form):
+        remember = form.cleaned_data.get('remember')
+        if not remember:
+            self.request.session.set_expiry(0)
+        else:
+            self.request.session.set_expiry(1209600)
+        return super().form_valid(form)
+
+
+class CustomLogoutView(LogoutView):
+    template_name = 'account/logout.html'
+
+class CustomSignupView(SignupView):
+    template_name = 'account/signup.html'
+    
+
+class CustomAccountView(EmailView):
+    template_name = 'account/account.html'
+    pass
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'account/password_reset.html'
+
+class CustomPasswordResetFromKeyView(PasswordResetFromKeyView):
+    template_name = 'account/password_reset_from_key.html'
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'account/password_reset_done.html'
+
+class CustomConfirmEmailView(ConfirmEmailView):
+    template_name = 'account/confirm_email.html'
+
+class CustomPasswordChangeView(PasswordChangeView):
+    def get(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        return '/account/'

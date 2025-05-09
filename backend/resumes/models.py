@@ -22,5 +22,5 @@ class ResumeDataModel(models.Model):
     created_at =  models.DateTimeField(default=timezone.now)
     
     def __str__(self):
-        return f"Resume {self.id}"
+        return f"Resume {self.id}-{self.title}"
     

@@ -1,18 +1,26 @@
-from django.urls import path
-from django.contrib.auth import views as auth_views
+from django.urls import path, re_path
 from . import views
 from django.views.generic import RedirectView
 
-app_name = "users"
+from django.shortcuts import render
+
 urlpatterns = [
-    path(
-        "",
-        RedirectView.as_view(pattern_name="users:dashboard", permanent=True),
-        name="root-redirect",
-    ),
+    path("", RedirectView.as_view(pattern_name="users:dashboard", permanent=True), name="root-redirect"),
+
+    # Auth views
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
-    path('signup/', views.SignUpView.as_view(), name='signup'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', views.CustomLoginView.as_view(), name='account_login'),
+    path('signup/', views.CustomSignupView.as_view(), name='account_signup'),
+    path('logout/', views.CustomLogoutView.as_view(), name='account_logout'),
+
+    # Account management
+    path('account/', views.CustomAccountView.as_view(), name='account_email'),  # if overriding email management
+    path('password/change/', views.CustomPasswordChangeView.as_view(), name='account_change_password'),
     
+    path('password/reset/', views.CustomPasswordResetView.as_view(), name='account_reset_password'),
+    re_path(r"^password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$", views.CustomPasswordResetFromKeyView.as_view(), name='account_reset_password_from_key'),
+    re_path(r"^confirm-email/(?P<key>[-:\w]+)/$",views.CustomConfirmEmailView.as_view(), name="account_confirm_email",),
+    path('password/reset/done/', views.CustomPasswordResetDoneView.as_view(), name='account_reset_password_done'),
 ]
+
+

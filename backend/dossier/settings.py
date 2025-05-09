@@ -21,14 +21,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-x+wvlwwygw*snp-8(k*!sm#vbdtm77!+-)qyphov=ppqbw^!c@"
+# ENV KEYS
+# Environment Varriables
+load_dotenv()  # in development
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+if not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE API KEY NOT FOUND")
+
+ENVIRONMENT  = os.getenv("ENVIRONMENT")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if ENVIRONMENT == "development":
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS =(
+    '127.0.0.1',
+    'localhost:8000',
+)
 
 # Application definition
 
@@ -44,7 +59,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "resumes.apps.ResumesConfig",
+    "resumes",
 ]
 
 MIDDLEWARE = [
@@ -147,44 +162,38 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# Environment Varriables
-load_dotenv()  # in development
-
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE API KEY NOT FOUND")
 
 
 
-# Allauth-specific settings
-ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'  # Same as LOGOUT_REDIRECT_URL
+# settings.py
 
-
-# Email settings (required for verification)
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Production
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Dev
-
-
-# Allauth settings
-
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False  # No username!
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Auth via email
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Force email confirm (optional)
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True  # Auto-login after verification
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # Simpler signup
-ACCOUNT_SESSION_REMEMBER = True  # "Remember me" functionality
-SITE_ID = 1  # Required for allauth
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-    }
+# Core Allauth Settings
+ACCOUNT_LOGIN_METHODS  = {'email'}  # Login with email only
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username', 'password1*']
+ACCOUNT_SESSION_REMEMBER = False  # "Remember me"
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'  # Post-logout redirect
+SITE_ID = 1  # Required
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/h',          # 5 failed login attempts per hour
+    'password_reset': '3/h',        # 3 password reset attempts per hour
+    'signup': '10/h',               # 10 signup attempts per hour
 }
 
 
-# Django's default auth settings (compatible with allauth)
-LOGIN_URL = 'account_login'  # allauth's login URL (instead of 'users:login')
-LOGIN_REDIRECT_URL = 'users:dashboard'  # After successful login
-LOGOUT_REDIRECT_URL = 'account_login'  # After logout (redirect to login page)
+
+# Email (Dev)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# URL Routing
+LOGIN_URL = 'account_login'  # Auth redirects
+LOGIN_REDIRECT_URL = 'dashboard'
+
+# Social Auth (Optional)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'}
+    }
+}
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_USERNAME_BLACKLIST=['admin', 'accounts', 'profile', 'category', 'post', 'get', 'resumes']

@@ -21,3 +21,4 @@ ollama_app
 .env
 %USERP~1/
 output.pdf
+node/
