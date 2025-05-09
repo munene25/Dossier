@@ -488,40 +488,57 @@
         <div class="skills-section">
             <h2>{{data.user_defined_fields.skills}}</h2>
             {% for skill in data.skills %}
-            {% for key, value in skill.items %}
-            {% if key == "description" %}
-            <div class="skills-list">
-                <ul class="unordered-list">
-                    {% for val in value %}
-                    <li class="list-item">
-                        <span>
-                            <div style="width: 35%;">{{val}}</div>
-                            <div class="skill-bar" style="width: 60%;">
-                                <div class="skill-level" style="width: 80%;"></div>
-                            </div>
-                        </span>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% else %}
-             <h3>{{value}}</h3>
-            {% endif %}
-            {% endfor %}
+                {% for key, value in skill.items %}
+                    {% if key != "description" %} {# Show heading first #}
+                    <h3>{{value}}</h3>
+                    {% endif %}
+                {% endfor %}
+                
+                {# Now show the skills list #}
+                {% for key, value in skill.items %}
+                    {% if key == "description" %}
+                    <div class="skills-list">
+                        <ul class="unordered-list">
+                            {% for val in value %}
+                            <li class="list-item">
+                                <span>
+                                    <div style="width: 35%;">{{val}}</div>
+                                    <div class="skill-bar" style="width: 60%;">
+                                        <div class="skill-level" style="width: 80%;"></div>
+                                    </div>
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
         {% endif %}
+        {% if data.extras %}
         <div class="extras-section">
-            {% if data.extras %}
             {% for extra in data.extras %}
+                {# First pass: Output all headings #}
                 {% for key, value in extra.items %}
-                {% if key == 'category_name'%} <h2> {{value}} </h2> {% else %}<p>{{value}}</p>{% endif %} 
+                    {% if key == 'category_name' %}
+                        <h2>{{value}}</h2>
+                    {% endif %}
+                {% endfor %}
+                
+                {# Second pass: Output all content #}
+                {% for key, value in extra.items %}
+                    {% if key != 'category_name' %}
+                        <p>{{value}}</p>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
+
+
 <div class="flex justify-center gap-4 mb-2">
     <!-- Continue Editing Button -->
     <a href="{% url 'resumes:personal_information' resume_id=resume_id %}" 
@@ -531,7 +548,7 @@
     <!-- Download PDF Button (Proper Implementation) -->
     <a href="{% url 'resumes:download' resume_id=resume_id %}" 
         class="bg-purple-600 hover:bg-purple-700 text-white text-sm md:text-md font-bold py-2 px-6 rounded-lg transition-colors flex items-center"
-        onclick="setTimeout(() => window.location.reload(), 3000); return true;">
+        onclick="setTimeout(() => window.location.reload(), 5000); return true;">
         <i class="fas fa-download mr-2"></i> Download PDF
     </a> 
 </div>
