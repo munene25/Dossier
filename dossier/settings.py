@@ -144,6 +144,7 @@ LANGUAGE_CODE = "en-us"
 
 if ENVIRONMENT == 'development':
     TIME_ZONE = "Africa/Nairobi"
+    
 else:
     TIME_ZONE = "Africa/Nairobi"
 

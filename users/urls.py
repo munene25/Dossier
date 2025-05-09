@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 from django.shortcuts import render
 
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="users:dashboard", permanent=True), name="root-redirect"),
+    path("", RedirectView.as_view(pattern_name="dashboard", permanent=True), name="root-redirect"),
 
     # Auth views
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
