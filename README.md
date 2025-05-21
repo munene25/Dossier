@@ -38,17 +38,22 @@ Dossier is a powerful, Django-based resume builder that helps users create profe
    git clone https://github.com/mune001/Dossier
 
 2. Set up a virtual environment:
+    ```bash
     python -m venv .venv
-    ### Linux/macOS
+
+    # Linux/macOS
     source .venv/bin/activate 
-    ### Windows
-    .venv\Scripts\activate     
+
+    # Windows
+    .venv\Scripts\activate 
 
 3. Install dependencies:
+    ```bash
     pip install -r requirements.txt
 
 4. Set up environment variables:
-    ### Edit .env with your settings
+    ```bash 
+    # Edit .env with your settings
     cd dossier
     cp .env.example .env
 
@@ -59,21 +64,28 @@ Dossier is a powerful, Django-based resume builder that helps users create profe
     python manage.py createsuperuser
 
 7. Node dependencies
-    ### Ensure you have node installed
+    ```bash
+    # Ensure you have node installed
     node -v
-    ### Install minify 
+
+    # Install minify 
     npm i minify -g
-    ### Tailwind CSS build (in watch mode for dev)
+
+    # Tailwind CSS build (in watch mode for dev)
     npm install -D tailwindcss@3
     npx tailwindcss init
-    ### Configure tailwind.config.js if new template folders are added
+
+    # Configure tailwind.config.js (if new template folders are added)
     npx tailwindcss -i ../static/css/input.css -o ./static/src/tailwind.css --watch
-    npx tailwindcss -i ../static/css/tailwind.css -o ./static/src/tailwind-min.css --minify
-    npx tailwindcss -i ../static/css/styles.css -o ./static/src/styles-min.css --minify
+
+    npx tailwindcss -i ../static/css/tailwind.css -o ./static/src/tailwind-min.css --watch
+
+    npx tailwindcss -i ../static/css/styles.css -o ./static/src/styles-min.css --watch
 
 
 
 8. Run the development server
+    ```bash
     python manage.py runserver
 
 ## License
