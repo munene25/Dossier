@@ -58,6 +58,7 @@ Dossier is a powerful, Django-based resume builder that helps users create profe
     cp .env.example .env
 
 5. Run migrations:
+    ```bash
     python manage.py migrate
 
 6. Create a superuser:
