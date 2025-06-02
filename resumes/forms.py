@@ -111,8 +111,8 @@ class ProfessionalExperienceForm(forms.Form):
         if isinstance(list_data, list):
             self.initial["responsibilities"] = "\n".join(list_data)
 
-    def clean_description(self):
-        submitted_list_data = self.cleaned_data.get("description", "")
+    def clean_responsibilities(self):
+        submitted_list_data = self.cleaned_data.get("responsibilities", "")
         data = submitted_list_data.splitlines()
         cleaned_data = [line for line in data if line.strip()]
         return cleaned_data
