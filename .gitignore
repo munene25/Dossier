@@ -8,7 +8,7 @@ __pycache__/
 *.tmp
 
 # Ignore virtual environment directories
-venv/
+.venv/
 .env/
 
 
