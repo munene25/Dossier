@@ -70,7 +70,7 @@ Dossier is a powerful, Django-based resume builder that helps users create profe
     # Ensure you have node installed
     node -v
 
-    # Install minify 
+    # Install minify
     npm i minify -g
 
     # Tailwind CSS build (in watch mode for dev)
